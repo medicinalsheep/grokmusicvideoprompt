@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GrokMusicVideoPrompt</title>
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --surface: #141414;
+      --border: #2a2a2a;
+      --text: #e8e8e8;
+      --muted: #888;
+      --accent: #00ff9d;
+      --accent-dim: #00cc7a;
+      --danger: #ff4d4d;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 2rem 1rem 4rem;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.25rem;
+      color: var(--accent);
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section h2 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 1.1rem;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+      margin-top: 1rem;
+    }
+
+    label:first-of-type {
+      margin-top: 0;
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      background: #0f0f0f;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.7rem 0.9rem;
+      color: var(--text);
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: border-color 0.15s;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 600px) {
+      .row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-top: 1.75rem;
+    }
+
+    button {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      padding: 0.75rem 1.4rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    button:hover {
+      background: var(--accent-dim);
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    button.secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    button.secondary:hover {
+      border-color: var(--muted);
+      background: #1a1a1a;
+    }
+
+    #output-section {
+      display: none;
+    }
+
+    #output {
+      background: #0f0f0f;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      font-family: "SF Mono", "Fira Code", "Cascadia Code", monospace;
+      font-size: 0.82rem;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      max-height: 520px;
+      overflow-y: auto;
+      color: #c8c8c8;
+    }
+
+    .status {
+      font-size: 0.85rem;
+      color: var(--accent);
+      margin-top: 0.75rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .status.show {
+      opacity: 1;
+    }
+
+    .hint {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.4rem;
+    }
+
+    footer {
+      margin-top: 3rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>GrokMusicVideoPrompt</h1>
+  <p class="subtitle">
+    Structured prompt architect for consistent Grok music videos.<br />
+    Forces black title card → scene plan → image → 10s video → always extend from last frame.
+  </p>
+
+  <!-- ==================== SONG DETAILS ==================== -->
+  <div class="section">
+    <h2>1. Song Details</h2>
+    <div class="row">
+      <div>
+        <label for="songName">Song Name *</label>
+        <input type="text" id="songName" placeholder="e.g. Neon Static" />
+      </div>
+      <div>
+        <label for="artist">Artist / Author *</label>
+        <input type="text" id="artist" placeholder="e.g. medicinalsheep" />
+      </div>
+    </div>
+    <label for="notes">Additional Notes / Credits (optional)</label>
+    <input type="text" id="notes" placeholder="e.g. 2026 • Produced by ... • Visual concept by ..." />
+  </div>
+
+  <!-- ==================== VISUAL DIRECTION ==================== -->
+  <div class="section">
+    <h2>2. Visual Direction</h2>
+    <label for="mood">Overall Mood / Aesthetic *</label>
+    <textarea id="mood" placeholder="e.g. Dark cyberpunk, rain-soaked neon streets, cold blue + magenta lighting, slightly grainy film look, high contrast"></textarea>
+
+    <label for="styleLock">Style Lock / Consistency Notes</label>
+    <textarea id="styleLock" placeholder="e.g. Keep the same female character with short silver hair and black tactical jacket. Same color grade. No sudden style shifts. Camera language should feel continuous."></textarea>
+  </div>
+
+  <!-- ==================== TIMELINE ==================== -->
+  <div class="section">
+    <h2>3. Scene & Timeline Layout</h2>
+    <label for="runtime">Target Runtime (seconds)</label>
+    <input type="text" id="runtime" placeholder="e.g. 60" value="60" style="max-width: 140px;" />
+
+    <label for="structure">Song Structure (sections)</label>
+    <input type="text" id="structure" placeholder="e.g. Intro – Verse 1 – Chorus – Verse 2 – Bridge – Final Chorus – Outro" />
+
+    <label for="scenes">Scene-by-Scene Breakdown *</label>
+    <textarea id="scenes" style="min-height: 160px;" placeholder="Example:
+0:00–0:04 → Black title card
+0:04–0:14 → Wide shot of rain-soaked neon alley, camera slowly pushes in
+0:14–0:24 → Close-up of character walking, slight handheld feel
+0:24–0:34 → Character turns corner into brighter intersection, camera follows
+..."></textarea>
+    <p class="hint">Tip: Write approximate 10-second blocks. The tool will enforce last-frame chaining between them.</p>
+  </div>
+
+  <!-- ==================== ACTIONS ==================== -->
+  <div class="actions">
+    <button onclick="generatePrompt()">Generate Master Prompt</button>
+    <button class="secondary" onclick="clearForm()">Clear</button>
+  </div>
+
+  <!-- ==================== OUTPUT ==================== -->
+  <div class="section" id="output-section">
+    <h2>Generated Prompt</h2>
+    <div id="output"></div>
+    <div class="actions" style="margin-top: 1rem;">
+      <button onclick="copyPrompt()">Copy to Clipboard</button>
+    </div>
+    <div class="status" id="status"></div>
+  </div>
+
+  <footer>
+    Built for consistent Grok Imagine video workflows • 
+    <a href="https://medicinalsheep.github.io/grokdevprompt/" target="_blank">GrokDevPrompt</a>
+  </footer>
+
+  <script>
+    function generatePrompt() {
+      const songName = document.getElementById('songName').value.trim() || '[SONG NAME]';
+      const artist = document.getElementById('artist').value.trim() || '[ARTIST]';
+      const notes = document.getElementById('notes').value.trim();
+      const mood = document.getElementById('mood').value.trim() || '[Describe overall aesthetic]';
+      const styleLock = document.getElementById('styleLock').value.trim();
+      const runtime = document.getElementById('runtime').value.trim() || '60';
+      const structure = document.getElementById('structure').value.trim() || '[INTRO / VERSE / CHORUS / etc.]';
+      const scenes = document.getElementById('scenes').value.trim() || '[Add scene breakdown here]';
+
+      let notesLine = notes ? `- Additional notes: ${notes}` : `- Additional notes: (none)`;
+
+      const prompt = `You are generating a clean, consistent music video sequence using Grok Imagine (image) + Grok video generation (10-second clips + up to 2 extensions).
+
+Follow this exact process and never deviate:
+
+### 1. TITLE CARD (always first)
+Generate a single still image that is pure black background with clean white text only.
+Text content:
+- Song Name: ${songName}
+- Artist / Author: ${artist}
+${notesLine}
+
+Style: Minimal, high-contrast, centered or elegantly placed white sans-serif text. No other elements, no logo, no particles, no effects. Hold this card for 3–4 seconds in the final edit.
+
+### 2. SCENE & TIMELINE LAYOUT
+Before generating any visuals, output a clear structured plan:
+
+Song structure / sections:
+${structure}
+
+Visual concept / mood:
+${mood}
+
+Scene-by-scene breakdown (target runtime ≈ ${runtime} seconds):
+${scenes}
+
+Key consistency rules for every clip:
+- Maintain the same character(s), lighting, color grade, and art style across all clips.
+- Camera language should feel continuous (matching movement direction and speed when possible).
+
+### 3. GENERATION WORKFLOW (STRICT – DO NOT SKIP)
+
+Step A – Generate the first keyframe image for Scene 1 (after the title card).
+Show the image and wait for approval / notes.
+
+Step B – Once approved, generate the first 10-second video clip starting from that image.
+
+Step C – Extension method (mandatory for every subsequent clip):
+- After each 10-second clip is generated, extract / use the final frame (last second) of that clip as the new starting image.
+- Do NOT reuse the original starting image.
+- Generate the next 10-second clip from the new ending frame.
+- Slightly change the camera view or continue the previous camera movement so the cut feels intentional and continuous.
+- Repeat this process for every extension (up to two extensions per base clip if needed, or chain multiple base clips).
+
+Always state clearly:
+“Using last frame of previous clip as new starting image → generating next 10s clip.”
+
+If the user requests a longer sequence, continue chaining last-frame → new clip until the timeline is covered.
+
+### 4. STYLE LOCK
+${styleLock || 'Maintain visual consistency across all clips. Same characters, lighting, color grade, and overall aesthetic.'}
+
+Begin now with the Title Card image only.`;
+
+      document.getElementById('output').textContent = prompt;
+      document.getElementById('output-section').style.display = 'block';
+      document.getElementById('status').classList.remove('show');
+      document.getElementById('output-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function copyPrompt() {
+      const text = document.getElementById('output').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const status = document.getElementById('status');
+        status.textContent = 'Copied to clipboard';
+        status.classList.add('show');
+        setTimeout(() => status.classList.remove('show'), 2000);
+      });
+    }
+
+    function clearForm() {
+      document.getElementById('songName').value = '';
+      document.getElementById('artist').value = '';
+      document.getElementById('notes').value = '';
+      document.getElementById('mood').value = '';
+      document.getElementById('styleLock').value = '';
+      document.getElementById('runtime').value = '60';
+      document.getElementById('structure').value = '';
+      document.getElementById('scenes').value = '';
+      document.getElementById('output-section').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
