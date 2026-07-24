@@ -203,8 +203,18 @@
   <h1>GrokMusicVideoPrompt</h1>
   <p class="subtitle">
     Structured prompt architect for consistent Grok music videos.<br />
-    Forces black title card → scene plan → image → 10s video → always extend from last frame.
+    Title card → scene plan → image → 10s clip (+ extensions) → new scene at clip end.
   </p>
+
+  <div class="section" style="border-color: #1a3a2a;">
+    <h2>How to use this</h2>
+    <p style="font-size: 0.9rem; color: var(--muted); margin: 0;">
+      Plan scenes in <strong style="color: var(--text);">10 / 20 / 30 second blocks</strong> (one base clip + up to two extensions).
+      Extensions stay in the <em>same</em> scene — you do not need last-frame language in extension prompts.
+      When a clip chain ends, <strong style="color: var(--text);">switch to the next scene</strong>.
+      To stitch clips together in the final edit, grab a still of the <strong style="color: var(--text);">last frame</strong> of a finished clip and use it as the starting image for the next scene’s video.
+    </p>
+  </div>
 
   <!-- ==================== SONG DETAILS ==================== -->
   <div class="section">
@@ -243,13 +253,13 @@
     <input type="text" id="structure" placeholder="e.g. Intro – Verse 1 – Chorus – Verse 2 – Bridge – Final Chorus – Outro" />
 
     <label for="scenes">Scene-by-Scene Breakdown *</label>
-    <textarea id="scenes" style="min-height: 160px;" placeholder="Example:
-0:00–0:04 → Black title card
-0:04–0:14 → Wide shot of rain-soaked neon alley, camera slowly pushes in
-0:14–0:24 → Close-up of character walking, slight handheld feel
-0:24–0:34 → Character turns corner into brighter intersection, camera follows
+    <textarea id="scenes" style="min-height: 160px;" placeholder="Example (map each scene to a 10 / 20 / 30s clip chain):
+0:00–0:04 → Black title card (still)
+0:04–0:14 → Scene 1 (10s): wide rain-soaked neon alley, slow push-in
+0:14–0:34 → Scene 2 (20s = 10s + 1 ext): character walks the alley, handheld
+0:34–1:04 → Scene 3 (30s = 10s + 2 ext): turns corner into bright intersection
 ..."></textarea>
-    <p class="hint">Tip: Write approximate 10-second blocks. The tool will enforce last-frame chaining between them.</p>
+    <p class="hint">Tip: Size each scene to 10s, 20s, or 30s. Scene changes happen when a clip chain ends — not mid-extension.</p>
   </div>
 
   <!-- ==================== ACTIONS ==================== -->
@@ -286,7 +296,13 @@
 
       let notesLine = notes ? `- Additional notes: ${notes}` : `- Additional notes: (none)`;
 
-      const prompt = `You are generating a clean, consistent music video sequence using Grok Imagine (image) + Grok video generation (10-second clips + up to 2 extensions).
+      const prompt = `You are generating a clean, consistent music video sequence using Grok Imagine (image) + Grok video generation.
+
+Clip model:
+- Each scene is ONE clip chain: a 10-second base video, optionally extended once (20s total) or twice (30s total).
+- Extensions stay inside the SAME scene. Do NOT put last-frame / “continue from ending image” language in extension prompts.
+- New scenes begin when a clip chain is finished (after the base clip, or after its last extension).
+- Continuity between separate clip chains is handled by the USER: they capture the last frame of a finished clip and use it as the starting image for the next scene’s video. Only mention that handoff at scene boundaries — never in mid-scene extension prompts.
 
 Follow this exact process and never deviate:
 
@@ -300,7 +316,7 @@ ${notesLine}
 Style: Minimal, high-contrast, centered or elegantly placed white sans-serif text. No other elements, no logo, no particles, no effects. Hold this card for 3–4 seconds in the final edit.
 
 ### 2. SCENE & TIMELINE LAYOUT
-Before generating any visuals, output a clear structured plan:
+Before generating any visuals, output a clear structured plan. Map every scene to a 10s / 20s / 30s clip chain (base + 0–2 extensions). Prefer scene changes at the end of a finished clip chain.
 
 Song structure / sections:
 ${structure}
@@ -311,28 +327,35 @@ ${mood}
 Scene-by-scene breakdown (target runtime ≈ ${runtime} seconds):
 ${scenes}
 
+For each scene, state:
+- Scene number + duration (10 / 20 / 30s)
+- What happens visually
+- How many extensions (0, 1, or 2)
+
 Key consistency rules for every clip:
 - Maintain the same character(s), lighting, color grade, and art style across all clips.
-- Camera language should feel continuous (matching movement direction and speed when possible).
+- Camera language should feel continuous within a scene; at scene boundaries, a deliberate camera or framing shift is fine if it still matches the style lock.
 
 ### 3. GENERATION WORKFLOW (STRICT – DO NOT SKIP)
 
-Step A – Generate the first keyframe image for Scene 1 (after the title card).
-Show the image and wait for approval / notes.
+Step A – Title card (still image only). Wait for approval.
 
-Step B – Once approved, generate the first 10-second video clip starting from that image.
+Step B – Scene 1 keyframe image (after the title card). Show it and wait for approval / notes.
 
-Step C – Extension method (mandatory for every subsequent clip):
-- After each 10-second clip is generated, extract / use the final frame (last second) of that clip as the new starting image.
-- Do NOT reuse the original starting image.
-- Generate the next 10-second clip from the new ending frame.
-- Slightly change the camera view or continue the previous camera movement so the cut feels intentional and continuous.
-- Repeat this process for every extension (up to two extensions per base clip if needed, or chain multiple base clips).
+Step C – Scene 1 base video: generate the first 10-second clip from the approved keyframe.
 
-Always state clearly:
-“Using last frame of previous clip as new starting image → generating next 10s clip.”
+Step D – In-scene extensions (same scene only):
+- If this scene is 20s or 30s, extend the current clip once or twice.
+- Extension prompts describe only continued action / camera motion inside this scene.
+- Do NOT instruct “use last frame as new starting image” or similar in extension prompts.
+- Grok’s built-in extension continues the clip; keep prompts about motion and content only.
 
-If the user requests a longer sequence, continue chaining last-frame → new clip until the timeline is covered.
+Step E – End of clip chain → next scene (scene boundary only):
+- When the scene’s final length is reached (after base, or after last extension), STOP extending.
+- Tell the user: capture / save the last frame of this finished clip, then use that still as the starting image for the NEXT scene’s video (so separate 10/20/30s clips can be stitched together later).
+- Then generate (or wait for) the next scene’s starting image, generate its 10s base clip, extend 0–2 times as planned, and repeat Step E at each scene boundary until the timeline is covered.
+
+Never put last-frame handoff language inside an extension prompt. Only at the end of a finished clip chain, when switching scenes.
 
 ### 4. STYLE LOCK
 ${styleLock || 'Maintain visual consistency across all clips. Same characters, lighting, color grade, and overall aesthetic.'}
