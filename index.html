@@ -77,6 +77,7 @@
     }
 
     input[type="text"],
+    select,
     textarea {
       width: 100%;
       background: #0f0f0f;
@@ -89,7 +90,17 @@
       transition: border-color 0.15s;
     }
 
+    select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23888' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.9rem center;
+      padding-right: 2.2rem;
+    }
+
     input[type="text"]:focus,
+    select:focus,
     textarea:focus {
       outline: none;
       border-color: var(--accent);
@@ -110,6 +121,72 @@
       .row {
         grid-template-columns: 1fr;
       }
+    }
+
+    .choice-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-top: 0.35rem;
+    }
+
+    @media (max-width: 600px) {
+      .choice-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .choice-card {
+      display: block;
+      position: relative;
+      cursor: pointer;
+      background: #0f0f0f;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.85rem 0.95rem;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .choice-card:hover {
+      border-color: var(--muted);
+    }
+
+    .choice-card:has(input:checked) {
+      border-color: var(--accent);
+      background: #0c1a14;
+    }
+
+    .choice-card input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .choice-card .choice-title {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+
+    .choice-card .choice-desc {
+      display: block;
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .choice-card .choice-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #000;
+      background: var(--accent);
+      border-radius: 4px;
+      padding: 0.1rem 0.4rem;
+      margin-left: 0.4rem;
+      vertical-align: middle;
     }
 
     .actions {
@@ -186,6 +263,114 @@
       margin-top: 0.4rem;
     }
 
+    .guide-block {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin: 0 0 1.1rem;
+    }
+
+    .guide-block:last-child {
+      margin-bottom: 0;
+    }
+
+    .guide-block strong.label {
+      color: var(--text);
+      display: block;
+      margin-bottom: 0.35rem;
+    }
+
+    .guide-block ol,
+    .guide-block ul {
+      margin: 0.4rem 0 0 1.2rem;
+      padding: 0;
+    }
+
+    .guide-block li {
+      margin-bottom: 0.35rem;
+    }
+
+    .guide-block code {
+      font-size: 0.82rem;
+      color: var(--accent);
+      background: #0f0f0f;
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+    }
+
+    .guide-block a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .guide-block a:hover {
+      text-decoration: underline;
+    }
+
+    .inline-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.65rem;
+    }
+
+    .inline-actions button {
+      padding: 0.45rem 0.85rem;
+      font-size: 0.82rem;
+    }
+
+    .guide-status {
+      font-size: 0.8rem;
+      color: var(--accent);
+      margin-top: 0.5rem;
+      min-height: 1.2em;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .guide-status.show {
+      opacity: 1;
+    }
+
+    #example-ref {
+      display: none;
+      background: var(--surface);
+      border: 1px solid #1a3a2a;
+      border-radius: 12px;
+      padding: 1.1rem 1.25rem;
+      margin: 0 0 1.5rem;
+    }
+
+    #example-ref.show {
+      display: block;
+    }
+
+    #example-ref h2 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 0.65rem;
+      color: var(--accent);
+    }
+
+    #example-ref p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin: 0 0 0.65rem;
+    }
+
+    #example-ref p:last-child {
+      margin-bottom: 0;
+    }
+
+    #example-ref a {
+      color: var(--accent);
+      text-decoration: none;
+      word-break: break-all;
+    }
+
+    #example-ref a:hover {
+      text-decoration: underline;
+    }
+
     footer {
       margin-top: 3rem;
       text-align: center;
@@ -197,23 +382,93 @@
       color: var(--accent);
       text-decoration: none;
     }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
   <h1>GrokMusicVideoPrompt</h1>
   <p class="subtitle">
-    Structured prompt architect for consistent Grok music videos.<br />
-    Title card → scene plan → image → 10s clip (+ extensions) → new scene at clip end.
+    Turn a finished track into a consistent Grok Imagine music video.<br />
+    Intake → outline → title card → Scene&nbsp;1 image → base clip → extensions → next scene.
   </p>
 
+  <!-- ==================== WHO + HOW ==================== -->
   <div class="section" style="border-color: #1a3a2a;">
-    <h2>How to use this</h2>
-    <p style="font-size: 0.9rem; color: var(--muted); margin: 0;">
-      Plan scenes in <strong style="color: var(--text);">10 / 20 / 30 second blocks</strong> (one base clip + up to two extensions).
-      Extensions stay in the <em>same</em> scene — you do not need last-frame language in extension prompts.
-      When a clip chain ends, <strong style="color: var(--text);">switch to the next scene</strong>.
-      To stitch clips together in the final edit, grab a still of the <strong style="color: var(--text);">last frame</strong> of a finished clip and use it as the starting image for the next scene’s video.
+    <h2>Who this is for</h2>
+    <p class="guide-block">
+      You already have a finished song as an <strong style="color: var(--text);">.mp3</strong> or
+      <strong style="color: var(--text);">.wav</strong> file, and you want to make a music video with
+      <strong style="color: var(--text);">Grok Imagine</strong> — planned scenes, matching style, and
+      clips you can stitch together in your editor. This tool builds the structured prompt that keeps
+      that workflow consistent.
     </p>
+
+    <h2 style="margin-top: 1.5rem;">How to use</h2>
+
+    <div class="guide-block">
+      <strong class="label">Option A — Guided in Grok (easiest)</strong>
+      Copy a ready-made opener (link + message) into a Grok chat. Grok can follow this tool’s workflow
+      and walk you through generation step by step.
+      <ul>
+        <li>
+          Live tool:
+          <a href="https://medicinalsheep.github.io/grokmusicvideoprompt/" target="_blank" rel="noopener">
+            medicinalsheep.github.io/grokmusicvideoprompt
+          </a>
+        </li>
+      </ul>
+      <div class="inline-actions">
+        <button type="button" class="secondary" onclick="copyGrokLink()">Copy link for Grok</button>
+      </div>
+      <div class="guide-status" id="guide-status"></div>
+    </div>
+
+    <div class="guide-block">
+      <strong class="label">Option B — Build the prompt yourself</strong>
+      Fill out the form below (including optional starting assets if you have them), click
+      <strong style="color: var(--text);">Generate Master Prompt</strong>, copy the result, and paste
+      it into a Grok chat. Grok will confirm intake, then walk one step at a time: outline → title card →
+      Scene&nbsp;1 start image only → base video prompt → extension prompts → next scene.
+    </div>
+
+    <div class="guide-block">
+      <strong class="label">What you’ll need</strong>
+      <ul>
+        <li>Your finished track (<code>.mp3</code> or <code>.wav</code>) for the final edit — Grok generates visuals, not the mixed audio bed</li>
+        <li>Song name, artist, and a rough visual mood</li>
+        <li>Optional but helpful: reference stills, character art, logos, lyric notes, or “must include” moments</li>
+        <li>A video editor (CapCut, DaVinci Resolve, etc.) to line clips up with the audio</li>
+      </ul>
+    </div>
+
+    <div class="guide-block">
+      <strong class="label">Clip length &amp; workflow</strong>
+      Pick a base length (<strong style="color: var(--text);">6s / 10s / 15s</strong>; default 10s)
+      and a workflow style:
+      <ul>
+        <li><strong style="color: var(--text);">Guided</strong> — one image/prompt at a time (recommended)</li>
+        <li><strong style="color: var(--text);">Full prompt pack</strong> — all copy-ready prompts after outline approval</li>
+      </ul>
+      Plan scenes in <strong style="color: var(--text);">1× / 2× / 3×</strong> your base length
+      (helpers and placeholders update when you change clip length). Extensions stay in the
+      <em>same</em> scene. At scene boundaries, grab the <strong style="color: var(--text);">last frame</strong>
+      as the next scene’s starting image.
+    </div>
+
+    <div class="guide-block">
+      <strong class="label">Tips &amp; edge cases</strong>
+      <ul>
+        <li><strong style="color: var(--text);">No audio in Grok</strong> — visuals only. Lay the <code>.mp3</code>/<code>.wav</code> under clips in CapCut, DaVinci Resolve, Premiere, etc.</li>
+        <li><strong style="color: var(--text);">10s default</strong> — best balance; two extensions ≈ a clean 30s scene.</li>
+        <li><strong style="color: var(--text);">15s</strong> — fewer chains for longer takes; full chain is 45s (heavier per clip).</li>
+        <li><strong style="color: var(--text);">6s</strong> — snappier cuts / more scene changes; full chain is 18s.</li>
+        <li><strong style="color: var(--text);">Stitching</strong> — last frame of chain A → start image for chain B so cuts don’t jump.</li>
+        <li><strong style="color: var(--text);">Try the form</strong> — use <em>Load example</em> for the Report Card sample (based on a finished Grok music video), then Generate.</li>
+      </ul>
+    </div>
   </div>
 
   <!-- ==================== SONG DETAILS ==================== -->
@@ -233,9 +488,59 @@
     <input type="text" id="notes" placeholder="e.g. 2026 • Produced by ... • Visual concept by ..." />
   </div>
 
+  <!-- ==================== INTAKE / ASSETS ==================== -->
+  <div class="section">
+    <h2>2. Starting Assets &amp; Preferences</h2>
+    <p class="hint" style="margin-top: 0; margin-bottom: 0.75rem;">
+      Optional — pre-fill these so Grok skips re-asking. Leave blank and Grok will ask during intake.
+    </p>
+
+    <label for="assets">Starting images / graphics</label>
+    <textarea id="assets" placeholder="e.g. I’ll attach a character reference (silver hair, black jacket). Logo PNG for end card. No location photos yet."></textarea>
+    <p class="hint">Describe what you’ll attach or already have: character art, locations, logos, title art, style refs.</p>
+
+    <label for="mustInclude">Must-include notes / lyric moments</label>
+    <textarea id="mustInclude" placeholder="e.g. Chorus: neon rain on the character’s face. Bridge: hard cut to empty rooftop. Include the lyric “static forever” as on-screen text once."></textarea>
+
+    <div class="row">
+      <div>
+        <label for="clipLength">Preferred clip length</label>
+        <select id="clipLength">
+          <option value="10" selected>10 seconds (recommended — 10 / 20 / 30s scenes)</option>
+          <option value="6">6 seconds (6 / 12 / 18s scenes)</option>
+          <option value="15">15 seconds (15 / 30 / 45s scenes)</option>
+        </select>
+        <p class="hint" id="clipLengthHint">Grok Imagine supports 6s, 10s, and 15s. Plan scenes in 10 / 20 / 30s blocks (base + up to 2 extensions).</p>
+      </div>
+      <div>
+        <label for="titleCardMode">Title card</label>
+        <select id="titleCardMode">
+          <option value="auto" selected>Auto — black background, white text</option>
+          <option value="user">I’ll supply title art / graphics</option>
+          <option value="ask">Ask me in chat</option>
+        </select>
+      </div>
+    </div>
+
+    <label style="margin-top: 1.25rem;">Workflow style</label>
+    <div class="choice-grid" role="radiogroup" aria-label="Workflow style">
+      <label class="choice-card">
+        <input type="radio" name="workflowMode" value="guided" checked />
+        <span class="choice-title">Guided step-by-step <span class="choice-badge">Recommended</span></span>
+        <span class="choice-desc">One image or video prompt at a time. Approve each step before the next — best for consistency.</span>
+      </label>
+      <label class="choice-card">
+        <input type="radio" name="workflowMode" value="pack" />
+        <span class="choice-title">Full prompt pack</span>
+        <span class="choice-desc">After outline approval, get all copy-ready image + base + extension prompts in one go. Power users.</span>
+      </label>
+    </div>
+    <p class="hint" id="workflowHint">Guided mode waits for approval between every generation step.</p>
+  </div>
+
   <!-- ==================== VISUAL DIRECTION ==================== -->
   <div class="section">
-    <h2>2. Visual Direction</h2>
+    <h2>3. Visual Direction</h2>
     <label for="mood">Overall Mood / Aesthetic *</label>
     <textarea id="mood" placeholder="e.g. Dark cyberpunk, rain-soaked neon streets, cold blue + magenta lighting, slightly grainy film look, high contrast"></textarea>
 
@@ -245,7 +550,7 @@
 
   <!-- ==================== TIMELINE ==================== -->
   <div class="section">
-    <h2>3. Scene & Timeline Layout</h2>
+    <h2>4. Scene &amp; Timeline Layout</h2>
     <label for="runtime">Target Runtime (seconds)</label>
     <input type="text" id="runtime" placeholder="e.g. 60" value="60" style="max-width: 140px;" />
 
@@ -253,19 +558,36 @@
     <input type="text" id="structure" placeholder="e.g. Intro – Verse 1 – Chorus – Verse 2 – Bridge – Final Chorus – Outro" />
 
     <label for="scenes">Scene-by-Scene Breakdown *</label>
-    <textarea id="scenes" style="min-height: 160px;" placeholder="Example (map each scene to a 10 / 20 / 30s clip chain):
-0:00–0:04 → Black title card (still)
-0:04–0:14 → Scene 1 (10s): wide rain-soaked neon alley, slow push-in
-0:14–0:34 → Scene 2 (20s = 10s + 1 ext): character walks the alley, handheld
-0:34–1:04 → Scene 3 (30s = 10s + 2 ext): turns corner into bright intersection
-..."></textarea>
-    <p class="hint">Tip: Size each scene to 10s, 20s, or 30s. Scene changes happen when a clip chain ends — not mid-extension.</p>
+    <textarea id="scenes" style="min-height: 160px;" placeholder=""></textarea>
+    <p class="hint" id="scenesHint">Tip: Size each scene to 10 / 20 / 30s. Scene changes happen when a clip chain ends — not mid-extension.</p>
   </div>
 
   <!-- ==================== ACTIONS ==================== -->
   <div class="actions">
-    <button onclick="generatePrompt()">Generate Master Prompt</button>
-    <button class="secondary" onclick="clearForm()">Clear</button>
+    <button type="button" onclick="generatePrompt()">Generate Master Prompt</button>
+    <button type="button" class="secondary" onclick="loadExample()">Load example</button>
+    <button type="button" class="secondary" onclick="copyGrokLink()">Copy link for Grok</button>
+    <button type="button" class="secondary" onclick="clearForm()">Clear</button>
+  </div>
+  <p class="hint" style="margin-top: 0.65rem;">
+    Load example fills a Report Card–style sample (~1:37, 10s guided) and shows a link to the finished video on X (earlier process — style reference only). Copy link for Grok pastes a ready opener with the live URL.
+  </p>
+  <div class="guide-status" id="form-status" style="margin-bottom: 1rem;"></div>
+
+  <!-- Shown only after Load example -->
+  <div id="example-ref" role="status" aria-live="polite">
+    <h2>Example reference — Report Card</h2>
+    <p>
+      Finished music video on X:
+      <a href="https://x.com/medicinalsheep/status/2081793904970731770?s=20" target="_blank" rel="noopener">
+        x.com/medicinalsheep/status/2081793904970731770
+      </a>
+    </p>
+    <p>
+      Note: that video was made with an <strong style="color: var(--text);">earlier version</strong> of the process,
+      before this tool’s current intake → outline → step-by-step workflow. Use it as a style/result reference,
+      not as a 1:1 guide to the prompts this page generates now.
+    </p>
   </div>
 
   <!-- ==================== OUTPUT ==================== -->
@@ -279,88 +601,472 @@
   </div>
 
   <footer>
-    Built for consistent Grok Imagine video workflows • 
-    <a href="https://medicinalsheep.github.io/grokdevprompt/" target="_blank">GrokDevPrompt</a>
+    Built for consistent Grok Imagine video workflows<br />
+    <a href="https://medicinalsheep.github.io/grokdevprompt/" target="_blank" rel="noopener">GrokDevPrompt</a>
+    ·
+    <a href="https://x.com/medicinalsheep" target="_blank" rel="noopener">X @medicinalsheep</a>
+    ·
+    <a href="https://github.com/sponsors/medicinalsheep" target="_blank" rel="noopener">Support on GitHub Sponsors</a>
   </footer>
 
   <script>
+    const LIVE_TOOL_URL = 'https://medicinalsheep.github.io/grokmusicvideoprompt/';
+
+    function clipBlocks(baseSeconds) {
+      const base = Number(baseSeconds) || 10;
+      return {
+        base,
+        mid: base * 2,
+        full: base * 3,
+        blocks: `${base} / ${base * 2} / ${base * 3}`,
+      };
+    }
+
+    function showStatus(elementId, message, ms) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+      el.textContent = message;
+      el.classList.add('show');
+      clearTimeout(el._hideTimer);
+      el._hideTimer = setTimeout(() => {
+        el.classList.remove('show');
+      }, ms || 2500);
+    }
+
+    function copyText(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        return navigator.clipboard.writeText(text);
+      }
+      return new Promise((resolve, reject) => {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand('copy');
+          resolve();
+        } catch (err) {
+          reject(err);
+        } finally {
+          document.body.removeChild(ta);
+        }
+      });
+    }
+
+    function copyGrokLink() {
+      const songName = document.getElementById('songName').value.trim();
+      const artist = document.getElementById('artist').value.trim();
+      const songBit = songName
+        ? ` for “${songName}”${artist ? ` by ${artist}` : ''}`
+        : '';
+      const message =
+        `I have a finished track (.mp3 / .wav) and want a consistent Grok Imagine music video${songBit}. ` +
+        `Please use this tool/workflow to help me plan and generate it step by step:\n${LIVE_TOOL_URL}\n\n` +
+        `Start with intake questions (assets, clip length 6/10/15s, title card), then outline only — no images until I approve the plan.`;
+
+      copyText(message)
+        .then(() => {
+          showStatus('guide-status', 'Copied opener + live link — paste into Grok');
+          showStatus('form-status', 'Copied opener + live link — paste into Grok');
+        })
+        .catch(() => {
+          showStatus('guide-status', 'Could not copy — select the live link manually');
+          showStatus('form-status', 'Could not copy — select the live link manually');
+        });
+    }
+
+    function loadExample() {
+      // Sample modeled on the finished “Report Card” Grok music video aesthetic (classroom satire).
+      // No local file paths — public-facing example only.
+      document.getElementById('songName').value = 'Report Card';
+      document.getElementById('artist').value = 'medicinalsheep';
+      document.getElementById('notes').value = '2026 • Grok Imagine music video sample';
+      document.getElementById('assets').value =
+        'Starting still: empty elementary classroom, wooden teacher desk, brass desk lamp, “5th Grade Report Card” for student “wokeGPT” (all D’s, parent note visible), green chalkboards soft in background. Character lock for Scene 2+: same boy (~10–12), brown hair, white t-shirt with bold black “ChatGPT” text; adult teacher arm in white sleeve handing the card.';
+      document.getElementById('mustInclude').value =
+        'Readable report card gags (all D grades + “too woke / difficulty telling the truth” parent note). Hand-off of the paper from teacher to student. Keep the same classroom and the same kid. End on a clean hold / title card.';
+      document.getElementById('clipLength').value = '10';
+      document.getElementById('titleCardMode').value = 'auto';
+      const guided = document.querySelector('input[name="workflowMode"][value="guided"]');
+      if (guided) guided.checked = true;
+      document.getElementById('mood').value =
+        'Photoreal elementary school classroom satire. Soft fluorescent + warm brass lamp key light, shallow depth of field, natural wood desks, green chalkboard bokeh. Clean cinematic realism — not cartoon, not cyberpunk. Slight comedy framing; sharp readable props (report card, chalkboard).';
+      document.getElementById('styleLock').value =
+        'Same empty classroom set for the open; same boy (face, hair, white ChatGPT tee) and teacher sleeve when people appear. Same warm wood + cool wall grade. Report card design stays consistent. No style jumps, no other locations unless planned.';
+      document.getElementById('runtime').value = '97';
+      document.getElementById('structure').value =
+        'Title – Cold open (report card still life) – Classroom handoff – Reaction / hold – Outro card';
+      document.getElementById('scenes').value =
+        `0:00–0:04 → Black title card (still): “Report Card” / medicinalsheep
+0:04–0:34 → Scene 1 (30s = 10s + 2 ext): empty classroom; report card on teacher desk under brass lamp; slow push-in; shallow DOF; chalkboards soft behind — no people yet
+0:34–1:04 → Scene 2 (30s = 10s + 2 ext): boy in white ChatGPT tee at a desk; teacher’s arm hands him the report card; he looks up, slightly stunned; continuous classroom lighting
+1:04–1:37 → Scene 3 (30s = 10s + 2 ext): tighter on his face / the card; small comedic beat; slow pull back toward empty desks; dissolve or cut to end title card`;
+
+      updateClipUI();
+      document.getElementById('output-section').style.display = 'none';
+      const exampleRef = document.getElementById('example-ref');
+      exampleRef.classList.add('show');
+      showStatus('form-status', 'Report Card example loaded — click Generate Master Prompt');
+      exampleRef.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function formatTime(totalSeconds) {
+      const s = Math.max(0, Math.round(totalSeconds));
+      const m = Math.floor(s / 60);
+      const r = s % 60;
+      return `${m}:${String(r).padStart(2, '0')}`;
+    }
+
+    function titleCardModeLabel(mode) {
+      if (mode === 'user') return 'User will supply title art / graphics';
+      if (mode === 'ask') return 'Ask the user in chat';
+      return 'Auto — pure black background with clean white text';
+    }
+
+    function getWorkflowMode() {
+      const selected = document.querySelector('input[name="workflowMode"]:checked');
+      return selected ? selected.value : 'guided';
+    }
+
+    function scenesPlaceholder(baseSeconds) {
+      const { base, mid, full, blocks } = clipBlocks(baseSeconds);
+      const t0 = 0;
+      const tTitle = 4;
+      const t1 = tTitle + base;
+      const t2 = t1 + mid;
+      const t3 = t2 + full;
+      return `Example (map each scene to ${blocks}s clip chains):
+0:00–${formatTime(tTitle)} → Black title card (still)
+${formatTime(tTitle)}–${formatTime(t1)} → Scene 1 (${base}s): wide rain-soaked neon alley, slow push-in
+${formatTime(t1)}–${formatTime(t2)} → Scene 2 (${mid}s = ${base}s + 1 ext): character walks the alley, handheld
+${formatTime(t2)}–${formatTime(t3)} → Scene 3 (${full}s = ${base}s + 2 ext): turns corner into bright intersection
+...`;
+    }
+
+    function updateClipUI() {
+      const clipLength = document.getElementById('clipLength').value || '10';
+      const { base, mid, full, blocks } = clipBlocks(clipLength);
+      const scenesEl = document.getElementById('scenes');
+      scenesEl.placeholder = scenesPlaceholder(clipLength);
+
+      document.getElementById('clipLengthHint').textContent =
+        `Grok Imagine supports 6s, 10s, and 15s. Plan scenes in ${blocks}s blocks ` +
+        `(${base}s base, optional +1 → ${mid}s, +2 → ${full}s).`;
+
+      document.getElementById('scenesHint').textContent =
+        `Tip: Size each scene to ${blocks}s. Scene changes happen when a clip chain ends — not mid-extension.`;
+
+      updateWorkflowHint();
+    }
+
+    function updateWorkflowHint() {
+      const mode = getWorkflowMode();
+      const hint = document.getElementById('workflowHint');
+      if (mode === 'pack') {
+        hint.textContent =
+          'Full pack mode: after outline approval, Grok outputs all copy-ready prompts for every scene in one package.';
+      } else {
+        hint.textContent =
+          'Guided mode waits for approval between every generation step (recommended).';
+      }
+    }
+
+    function buildWorkflowRules(mode, base, mid, full) {
+      if (mode === 'pack') {
+        return `## WORKFLOW MODE: FULL PROMPT PACK
+User selected full prompt pack (power-user mode).
+
+Still always:
+1. Complete INTAKE first.
+2. Output OUTLINE ONLY and wait for approval / edits.
+3. After outline approval, deliver ONE complete prompt pack for the whole video (not drip-fed step-by-step).
+
+The pack must include, in order, with clear labels:
+- Title card instructions (or image prompt)
+- For EACH scene:
+  - Start image prompt (Scene 1 from concept/refs; later scenes note last-frame handoff + optional new keyframe prompt)
+  - Base video prompt (${base}s) in a fenced paste-ready block
+  - Extension prompts if planned (1 for ${mid}s scenes, 2 for ${full}s scenes) — each in its own fenced block
+  - Boundary note: save last frame → next scene start image
+- Style lock reminder at the end
+
+Rules inside the pack:
+- Extension prompts = same-scene motion/content only. NEVER last-frame / new-scene language in extensions.
+- Last-frame handoff language only in boundary notes between scenes.
+- User may still ask to generate assets one at a time from the pack; the pack itself is the full reference.
+
+Do NOT generate every image/video automatically unless the user asks — deliver the copy-ready pack after outline approval, then generate only what they request.`;
+      }
+
+      return `## WORKFLOW MODE: GUIDED STEP-BY-STEP (recommended)
+User selected guided mode. Work ONE live step at a time. After each step, STOP and wait for user approval, notes, or “continue”.
+- Do NOT dump every scene’s image prompts, video prompts, or extension prompts up front.
+- Do NOT pre-generate keyframes or video prompts for future scenes.
+- Ready-to-copy prompts appear only for the CURRENT live step.
+- Exception: if the user later asks for a “full prompt pack”, switch to pack delivery for remaining work.`;
+    }
+
+    function buildGenerationProcess(mode, base, mid, full, titleCardInstructions) {
+      if (mode === 'pack') {
+        return `### 2. TITLE CARD + FULL PROMPT PACK — after outline approval
+First, title card:
+${titleCardInstructions}
+
+Then immediately deliver the full copy-ready prompt pack for every scene in the approved outline (see WORKFLOW MODE above). Use this format for video lines:
+
+**Scene N — Base video (${base}s)**
+\`\`\`
+[paste-ready prompt]
+\`\`\`
+
+**Scene N — Extension K of M (+${base}s → total Xs)**
+\`\`\`
+[paste-ready continued motion only — same scene]
+\`\`\`
+
+After delivering the pack, ask which asset to generate first (title card image, Scene 1 start image, etc.). Do not auto-run the entire video unless asked.
+
+### 3. GENERATE FROM THE PACK (on request)
+When the user picks an item, generate that still or clip only, then wait for the next request.
+At each scene boundary (when finishing a chain), remind them to save the last frame for the next scene’s start image.
+
+Extension rules (always):
+- Same scene, continuous motion only.
+- NEVER “use last frame as starting image” or cross-scene language inside extension prompts.
+- Last-frame handoff only in boundary notes between scenes.`;
+      }
+
+      return `### 2. TITLE CARD — after outline approval
+${titleCardInstructions}
+
+Generate (or accept) the title card still only. Wait for approval. Then move to Scene 1 start image — nothing else.
+
+### 3. SCENE 1 START IMAGE ONLY
+Generate ONE keyframe still for Scene 1 (the first visual after the title card).
+- Match mood, style lock, and any intake references.
+- This image is the starting frame for Scene 1’s base video.
+- Do NOT generate Scene 2+ keyframes yet.
+- Show the image (or a precise image prompt if the user generates it themselves) and wait for approval / notes.
+
+### 4. SCENE 1 BASE VIDEO PROMPT (${base}s)
+Only after the Scene 1 start image is approved, provide ONE copy-ready base video prompt for a ${base}s Grok Imagine clip driven from that image.
+
+Format exactly:
+
+**Scene 1 — Base video (${base}s)**
+\`\`\`
+[paste-ready prompt: subject, action, camera move, lighting, style; assume the approved start image is the first frame]
+\`\`\`
+- Duration: ${base}s
+- Driven from: approved Scene 1 start image
+- Then wait. Do not output extension prompts until the user accepts this base (or asks for the next step).
+
+If you can generate video directly, generate the ${base}s clip from the approved image using that prompt, then wait.
+
+### 5. IN-SCENE EXTENSION PROMPTS (same scene only)
+If the outline planned extensions for this scene, deliver them ONE AT A TIME after the previous clip step is accepted.
+
+For a full ${full}s scene with ${base}s base: deliver **two** extension prompts (Ext 1, then Ext 2).
+For a ${mid}s scene: deliver **one** extension prompt.
+For a ${base}s scene: skip this section.
+
+Format each as:
+
+**Scene N — Extension K of M (+${base}s → total Xs)**
+\`\`\`
+[paste-ready prompt: ONLY continued action / camera motion inside this same scene]
+\`\`\`
+
+Extension rules:
+- Same scene, continuous motion/content only.
+- NEVER include “use last frame as starting image”, “new scene”, or cross-scene handoff language.
+- Grok’s built-in extend continues the clip — prompts describe what happens next in the motion, not how to re-seed the image.
+- After each extension prompt (or generated extend), wait for approval before the next extension.
+
+### 6. SCENE BOUNDARY HANDOFF
+When this scene’s planned length is reached (after base, or after its last extension):
+- STOP extending this chain.
+- Tell the user clearly:
+  1. Save / capture the **last frame** of this finished clip.
+  2. Use that still as the **starting image** for the NEXT scene’s video (so separate chains stitch cleanly in the editor).
+- Do not start the next scene until they confirm they have the last frame (or say to proceed).
+
+### 7. NEXT SCENES (repeat 3–6)
+For each remaining scene, in order:
+1. Start image only (from last-frame handoff and/or a new keyframe as planned) → wait
+2. One copy-ready base video prompt (${base}s) → wait
+3. Extension prompts one at a time if planned (up to 2 for a ${full}s scene) → wait after each
+4. Boundary handoff → next scene
+
+Never jump ahead. Never batch future scenes unless the user asks to switch to a full prompt pack.`;
+    }
+
     function generatePrompt() {
       const songName = document.getElementById('songName').value.trim() || '[SONG NAME]';
       const artist = document.getElementById('artist').value.trim() || '[ARTIST]';
       const notes = document.getElementById('notes').value.trim();
+      const assets = document.getElementById('assets').value.trim();
+      const mustInclude = document.getElementById('mustInclude').value.trim();
+      const clipLength = document.getElementById('clipLength').value || '10';
+      const titleCardMode = document.getElementById('titleCardMode').value || 'auto';
+      const workflowMode = getWorkflowMode();
       const mood = document.getElementById('mood').value.trim() || '[Describe overall aesthetic]';
       const styleLock = document.getElementById('styleLock').value.trim();
       const runtime = document.getElementById('runtime').value.trim() || '60';
       const structure = document.getElementById('structure').value.trim() || '[INTRO / VERSE / CHORUS / etc.]';
       const scenes = document.getElementById('scenes').value.trim() || '[Add scene breakdown here]';
 
-      let notesLine = notes ? `- Additional notes: ${notes}` : `- Additional notes: (none)`;
+      const notesLine = notes ? `- Additional notes: ${notes}` : `- Additional notes: (none)`;
+      const { base, mid, full, blocks } = clipBlocks(clipLength);
 
-      const prompt = `You are generating a clean, consistent music video sequence using Grok Imagine (image) + Grok video generation.
+      const assetsLine = assets || '(not provided — ask the user)';
+      const mustIncludeLine = mustInclude || '(not provided — ask the user)';
+      const titleCardLine = titleCardModeLabel(titleCardMode);
+      const runtimeProvided = Boolean(document.getElementById('runtime').value.trim());
+      const workflowLabel =
+        workflowMode === 'pack' ? 'Full prompt pack' : 'Guided step-by-step';
 
-Clip model:
-- Each scene is ONE clip chain: a 10-second base video, optionally extended once (20s total) or twice (30s total).
-- Extensions stay inside the SAME scene. Do NOT put last-frame / “continue from ending image” language in extension prompts.
-- New scenes begin when a clip chain is finished (after the base clip, or after its last extension).
-- Continuity between separate clip chains is handled by the USER: they capture the last frame of a finished clip and use it as the starting image for the next scene’s video. Only mention that handoff at scene boundaries — never in mid-scene extension prompts.
+      const intakeCompleteHint =
+        assets && mustInclude && titleCardMode !== 'ask'
+          ? 'Most intake fields are already filled. Briefly confirm them with the user, then proceed to OUTLINE ONLY. Do not re-ask answered questions unless they want to change something.'
+          : 'Ask only for items still marked “not provided” or “ask”. Wait for replies (or “none / use defaults”) before the outline.';
 
-Follow this exact process and never deviate:
-
-### 1. TITLE CARD (always first)
-Generate a single still image that is pure black background with clean white text only.
+      let titleCardInstructions;
+      if (titleCardMode === 'user') {
+        titleCardInstructions = `Use the user’s supplied title art / graphics when they provide them. Do not invent a different title treatment unless they ask. Hold the title for 3–4 seconds in the final edit.
+Text / credit reference (if needed on or under their art):
+- Song Name: ${songName}
+- Artist / Author: ${artist}
+${notesLine}`;
+      } else if (titleCardMode === 'ask') {
+        titleCardInstructions = `Follow whatever title-card choice the user made during intake (auto black/white text vs their own art).
+If they chose auto, generate pure black background + clean white text:
+- Song Name: ${songName}
+- Artist / Author: ${artist}
+${notesLine}
+Style when auto: Minimal, high-contrast, white sans-serif only. No logo, particles, or effects.
+If they supply art, use that instead. Hold the title for 3–4 seconds in the final edit.`;
+      } else {
+        titleCardInstructions = `Generate a single still image that is pure black background with clean white text only.
 Text content:
 - Song Name: ${songName}
 - Artist / Author: ${artist}
 ${notesLine}
 
-Style: Minimal, high-contrast, centered or elegantly placed white sans-serif text. No other elements, no logo, no particles, no effects. Hold this card for 3–4 seconds in the final edit.
+Style: Minimal, high-contrast, centered or elegantly placed white sans-serif text. No other elements, no logo, no particles, no effects. Hold this card for 3–4 seconds in the final edit.`;
+      }
 
-### 2. SCENE & TIMELINE LAYOUT
-Before generating any visuals, output a clear structured plan. Map every scene to a 10s / 20s / 30s clip chain (base + 0–2 extensions). Prefer scene changes at the end of a finished clip chain.
+      const workflowRules = buildWorkflowRules(workflowMode, base, mid, full);
+      const generationProcess = buildGenerationProcess(
+        workflowMode,
+        base,
+        mid,
+        full,
+        titleCardInstructions
+      );
 
+      const outlineEndNote =
+        workflowMode === 'pack'
+          ? 'Do NOT write full image or video prompts yet — plan language only. End with: “Approve this outline (or request edits) before we deliver the full prompt pack.”'
+          : 'Do NOT write full image or video prompts yet — plan language only. End with: “Approve this outline (or request edits) before we generate the title card.”';
+
+      const outlineOrderExample =
+        workflowMode === 'pack'
+          ? 'Also list what the prompt pack will contain, e.g.: title card → each scene’s start image prompt + base + extensions + boundary notes.'
+          : 'Also list a short generation order at the end of the outline, e.g.:\n1) Title card → 2) Scene 1 start image only → 3) Scene 1 base video prompt → 4) Scene 1 ext prompts → 5) boundary handoff → 6) Scene 2 start image → …';
+
+      const prompt = `You are helping produce a clean, consistent music video using Grok Imagine (image) + Grok video generation.
+
+The user has (or will have) a finished track (.mp3 / .wav). You plan visuals and generate stills/clips; they sync audio in their editor later.
+
+## PRODUCTION NOTES
+- Grok does NOT mix or attach the song audio. Visuals only — user lays .mp3/.wav under clips in an editor (CapCut, DaVinci, Premiere, etc.).
+- Clip length guide: 10s = best default (two extensions ≈ 30s scene). 15s = longer takes, fewer chains (full chain 45s). 6s = snappier cuts, more chains (full chain 18s). Current selection: ${base}s base → plan in ${blocks}s blocks.
+- Prefer scene changes at finished clip-chain boundaries so the user can stitch with last-frame handoffs.
+
+## CLIP MODEL
+Preferred base length: ${base}s (Grok Imagine supports 6s / 10s / 15s — use this unless intake changes it).
+
+- Each scene is ONE clip chain: ${base}s base video → optional Extension 1 → optional Extension 2.
+- Scene totals: ${base}s (base only) | ${mid}s (base + 1 ext) | ${full}s (base + 2 ext).
+- Example: a ${full}s scene = ${base}s base + TWO extension prompts (${base} + ${base} + ${base}).
+- Plan the full video in ${blocks}s scene blocks.
+- Extensions stay inside the SAME scene. Never put last-frame / “continue from ending image” language in extension prompts.
+- New scenes begin only when a clip chain is finished.
+- Between separate clip chains, the USER captures the last frame of the finished clip and uses it as the starting image for the next scene’s video. Mention that handoff only at scene boundaries — never inside extension prompts.
+
+${workflowRules}
+
+## PROCESS (never skip intake → outline)
+
+### 0. INTAKE — no images, no outline yet
+${intakeCompleteHint}
+
+Already provided (treat as answers; only re-ask if the user wants to revise):
+- Starting images / graphics: ${assetsLine}
+- Must-include notes / lyric moments: ${mustIncludeLine}
+- Preferred clip length: ${base}s → scene blocks ${blocks}s
+- Workflow style: ${workflowLabel}
+- Target runtime: ≈ ${runtime} seconds${runtimeProvided ? '' : ' (default — confirm with user)'}
+- Title card preference: ${titleCardLine}
+- Song: ${songName} — ${artist}
+
+If anything is still missing, ask (skip answered items):
+1. Starting images or graphics? (character, location, logo, title art, style refs) — attach or describe.
+2. Notes, lyric highlights, or “must include” moments?
+3. Clip length: 6s, 10s (recommended for ~${full}s scenes with two extensions), or 15s?
+4. Confirm target runtime / song length if needed.
+5. Title card: auto black + white text for “${songName}” / “${artist}”, or user-supplied art?
+
+Do NOT generate images or the outline until intake is complete (or the user says proceed with defaults).
+
+### 1. OUTLINE ONLY — still no images
+After intake, output a structured plan only. Wait for approval / edits before any generation or prompt pack.
+
+Inputs to use:
 Song structure / sections:
 ${structure}
 
 Visual concept / mood:
 ${mood}
 
-Scene-by-scene breakdown (target runtime ≈ ${runtime} seconds):
+Must-include moments (weave into the plan):
+${mustInclude || '(none specified yet — use intake answers)'}
+
+User’s scene sketch (target runtime ≈ ${runtime}s):
 ${scenes}
 
-For each scene, state:
-- Scene number + duration (10 / 20 / 30s)
-- What happens visually
-- How many extensions (0, 1, or 2)
+For EACH scene in the outline, include:
+- Scene number + time range on the song (e.g. 0:04–0:34)
+- Total duration and clip math (e.g. “${full}s = ${base}s base + 2 extensions”)
+- Visual action / what happens
+- Camera language (push-in, handheld, locked-off, etc.)
+- Beat map inside the chain:
+  - Base (${base}s): what motion / framing happens
+  - Ext 1 (if any): how the same scene continues
+  - Ext 2 (if any): how it resolves before the next scene
+- Whether this scene should reuse a last-frame handoff from the previous clip chain
 
-Key consistency rules for every clip:
-- Maintain the same character(s), lighting, color grade, and art style across all clips.
-- Camera language should feel continuous within a scene; at scene boundaries, a deliberate camera or framing shift is fine if it still matches the style lock.
+${outlineOrderExample}
 
-### 3. GENERATION WORKFLOW (STRICT – DO NOT SKIP)
+${outlineEndNote}
 
-Step A – Title card (still image only). Wait for approval.
+${generationProcess}
 
-Step B – Scene 1 keyframe image (after the title card). Show it and wait for approval / notes.
-
-Step C – Scene 1 base video: generate the first 10-second clip from the approved keyframe.
-
-Step D – In-scene extensions (same scene only):
-- If this scene is 20s or 30s, extend the current clip once or twice.
-- Extension prompts describe only continued action / camera motion inside this scene.
-- Do NOT instruct “use last frame as new starting image” or similar in extension prompts.
-- Grok’s built-in extension continues the clip; keep prompts about motion and content only.
-
-Step E – End of clip chain → next scene (scene boundary only):
-- When the scene’s final length is reached (after base, or after last extension), STOP extending.
-- Tell the user: capture / save the last frame of this finished clip, then use that still as the starting image for the NEXT scene’s video (so separate 10/20/30s clips can be stitched together later).
-- Then generate (or wait for) the next scene’s starting image, generate its 10s base clip, extend 0–2 times as planned, and repeat Step E at each scene boundary until the timeline is covered.
-
-Never put last-frame handoff language inside an extension prompt. Only at the end of a finished clip chain, when switching scenes.
-
-### 4. STYLE LOCK
+## STYLE LOCK
 ${styleLock || 'Maintain visual consistency across all clips. Same characters, lighting, color grade, and overall aesthetic.'}
 
-Begin now with the Title Card image only.`;
+Also:
+- Same character(s), lighting, color grade, and art style across the whole video.
+- Honor intake reference images / graphics.
+- Camera feels continuous within a scene; at scene boundaries a deliberate framing shift is fine if it still matches the style lock.
+- Remind the user once (near the end of the outline or first generation) that final audio sync happens in their editor — not inside Grok.
+
+## START NOW
+Begin with the INTAKE step only. Do not generate images or the outline until intake is complete (or the user confirms defaults).`;
 
       document.getElementById('output').textContent = prompt;
       document.getElementById('output-section').style.display = 'block';
@@ -370,25 +1076,36 @@ Begin now with the Title Card image only.`;
 
     function copyPrompt() {
       const text = document.getElementById('output').textContent;
-      navigator.clipboard.writeText(text).then(() => {
-        const status = document.getElementById('status');
-        status.textContent = 'Copied to clipboard';
-        status.classList.add('show');
-        setTimeout(() => status.classList.remove('show'), 2000);
-      });
+      copyText(text)
+        .then(() => showStatus('status', 'Copied master prompt to clipboard'))
+        .catch(() => showStatus('status', 'Could not copy — select the prompt manually'));
     }
 
     function clearForm() {
       document.getElementById('songName').value = '';
       document.getElementById('artist').value = '';
       document.getElementById('notes').value = '';
+      document.getElementById('assets').value = '';
+      document.getElementById('mustInclude').value = '';
+      document.getElementById('clipLength').value = '10';
+      document.getElementById('titleCardMode').value = 'auto';
+      const guided = document.querySelector('input[name="workflowMode"][value="guided"]');
+      if (guided) guided.checked = true;
       document.getElementById('mood').value = '';
       document.getElementById('styleLock').value = '';
       document.getElementById('runtime').value = '60';
       document.getElementById('structure').value = '';
       document.getElementById('scenes').value = '';
       document.getElementById('output-section').style.display = 'none';
+      document.getElementById('example-ref').classList.remove('show');
+      updateClipUI();
     }
+
+    document.getElementById('clipLength').addEventListener('change', updateClipUI);
+    document.querySelectorAll('input[name="workflowMode"]').forEach((el) => {
+      el.addEventListener('change', updateWorkflowHint);
+    });
+    updateClipUI();
   </script>
 </body>
 </html>
