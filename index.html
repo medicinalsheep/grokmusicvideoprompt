@@ -4,6 +4,28 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GrokMusicVideoPrompt</title>
+  <meta name="description" content="Structured prompt architect for consistent Grok Imagine music videos. Plan scenes, generate clips, stitch to your track." />
+  <meta name="theme-color" content="#00ff9d" />
+
+  <!-- Icons -->
+  <link rel="icon" type="image/png" sizes="16x16" href="icon/favicon-16x16.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="icon/icon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icon/icon-192.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="icon/icon-512.png" />
+  <link rel="apple-touch-icon" href="icon/gmvpicon.png" />
+  <link rel="manifest" href="site.webmanifest" />
+
+  <!-- Social preview -->
+  <meta property="og:title" content="GrokMusicVideoPrompt" />
+  <meta property="og:description" content="Turn a finished track into a consistent Grok Imagine music video." />
+  <meta property="og:image" content="https://medicinalsheep.github.io/grokmusicvideoprompt/icon/gmvpicon.png" />
+  <meta property="og:url" content="https://medicinalsheep.github.io/grokmusicvideoprompt/" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="GrokMusicVideoPrompt" />
+  <meta name="twitter:description" content="Turn a finished track into a consistent Grok Imagine music video." />
+  <meta name="twitter:image" content="https://medicinalsheep.github.io/grokmusicvideoprompt/icon/gmvpicon.png" />
+
   <style>
     :root {
       --bg: #0a0a0a;
@@ -32,12 +54,29 @@
       margin: 0 auto;
     }
 
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .brand-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      flex-shrink: 0;
+      display: block;
+      box-shadow: 0 0 20px rgba(0, 255, 157, 0.25);
+    }
+
     h1 {
       font-size: 1.75rem;
       font-weight: 700;
       letter-spacing: -0.03em;
-      margin-bottom: 0.25rem;
+      margin: 0;
       color: var(--accent);
+      line-height: 1.15;
     }
 
     .subtitle {
@@ -389,7 +428,10 @@
   </style>
 </head>
 <body>
-  <h1>GrokMusicVideoPrompt</h1>
+  <header class="brand">
+    <img class="brand-icon" src="icon/gmvpicon.png" width="52" height="52" alt="GrokMusicVideoPrompt icon" />
+    <h1>GrokMusicVideoPrompt</h1>
+  </header>
   <p class="subtitle">
     Turn a finished track into a consistent Grok Imagine music video.<br />
     Intake → outline → title card → Scene&nbsp;1 image → base clip → extensions → next scene.

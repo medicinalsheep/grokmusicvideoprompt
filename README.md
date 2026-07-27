@@ -104,6 +104,18 @@ Grok asks (or confirms what you pre-filled):
 
 Open `index.html` in a browser — no build step required. Static site; GitHub Pages serves the same file.
 
+## Icons
+
+Assets live in `icon/`:
+
+| File | Use |
+|------|-----|
+| `favicon-16x16.png` | Browser tab (16×16) |
+| `icon-32x32.png` | Browser tab (32×32) |
+| `icon-192.png` / `icon-512.png` | PWA / high-res favicon |
+| `gmvpicon.png` | Header logo, Apple touch icon, social preview |
+| `gmvpicon.tif` | Source master (not used on the web) |
+
 ## License / support
 
 Personal project by [medicinalsheep](https://x.com/medicinalsheep). If this helps your workflow: [GitHub Sponsors](https://github.com/sponsors/medicinalsheep).
