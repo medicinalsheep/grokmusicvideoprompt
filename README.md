@@ -2,7 +2,7 @@
 
 Turn a finished track into a consistent **Grok Imagine** music video.
 
-You have an `.mp3` or `.wav` ready and want planned scenes, a locked visual style, and stitchable clips — this tool builds the structured master prompt that drives that workflow.
+You have an `.mp3` or `.wav` ready and want planned scenes, a locked visual style, and clips you can extend, loop, or combine in Grok — full cut or a lighter token budget. This tool builds the structured master prompt that drives that workflow.
 
 ## Links
 
@@ -17,7 +17,7 @@ You have an `.mp3` or `.wav` ready and want planned scenes, a locked visual styl
 
 - You already finished the song (audio file ready)
 - You want a music video made with Grok Imagine (image + video)
-- You care about consistency: same characters, lighting, and scene handoffs you can edit to the track
+- You care about consistency (last-frame screenshots between chains) more than reinventing each start image from text
 
 ## How to use
 
@@ -69,7 +69,7 @@ Grok asks (or confirms what you pre-filled):
 
 - Extensions stay in the **same** scene (no last-frame language in extension prompts)
 - New scenes start when a clip chain ends
-- Between scenes: **last frame** of chain A → start image for chain B
+- **Continuity:** screenshot the **last frame** of the finished chain (e.g. after a 30s = base + 2 ext) and use it as the next clip’s start image — do **not** text-prompt a new start still if you want characters/scene to match
 
 ## Workflow style
 
@@ -86,21 +86,23 @@ Grok asks (or confirms what you pre-filled):
 4. **Scene 1 start image only** — do not pre-make later keyframes  
 5. **Base video prompt** — one copy-ready base-length prompt from that image  
 6. **Extension prompts** — one at a time (e.g. two extensions for a 30s scene on 10s base)  
-7. **Boundary** — save last frame → next scene start image → repeat  
+7. **Boundary** — screenshot last frame → next clip start image (if continuity) → repeat  
+8. **Before assembly** — confirm order of operations, then combine / loop as you prefer  
 
 ### Full pack flow
 
 1. **Intake** → **Outline** (approve)  
 2. Deliver **full prompt pack** for every scene  
 3. Generate assets from the pack on request  
+4. Confirm assembly order, then mix in Grok  
 
 ## Tips & edge cases
 
-- **Goal** — a full music video: generate clips and combine them into one consistent sequence for your track
-- **Use Grok tab or Grok app** when mixing the final video — not Grok inside the **X** tab
-- **10s** is the practical default; use **15s** for longer continuous shots, **6s** for faster montage
-- **Scene joins** — capture last frame at scene boundaries so the next chain starts cleanly
-- **Load example** fills a **Report Card** demo (~1:37, 10s guided) and reveals a link to the [finished video on X](https://x.com/medicinalsheep/status/2081793904970731770?s=20) (made with an **earlier process** — style reference only, not a 1:1 guide to this tool’s current prompts)
+- **Scope** — full cut, short piece, or a few looped clips; tokens and taste decide, not the tool
+- **Use Grok tab or Grok app** when mixing — not Grok inside the **X** tab
+- **Continuity** — screenshot last frame of each finished chain for the next start; text-only next starts break consistency
+- **10s** is the practical default; use **15s** for longer takes, **6s** for snappier cuts
+- **Load example** fills a **Report Card** demo (~1:37, 10s guided) and reveals a link to the [finished video on X](https://x.com/medicinalsheep/status/2081793904970731770?s=20) (made with an **earlier process** — style reference only)
 
 ## Local
 
