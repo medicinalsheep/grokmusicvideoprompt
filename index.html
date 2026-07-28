@@ -679,19 +679,20 @@
       </ul>
       Plan scenes in <strong style="color: var(--text);">1× / 2× / 3×</strong> your base length
       (helpers and placeholders update when you change clip length). Extensions stay in the
-      <em>same</em> scene. At scene boundaries, grab the <strong style="color: var(--text);">last frame</strong>
-      as the next scene’s starting image.
+      <em>same</em> scene. For continuity between chains: <strong style="color: var(--text);">screenshot the last frame</strong>
+      of the finished clip (e.g. after a full 30s = base + 2 ext) and use that still as the
+      <strong style="color: var(--text);">starting image</strong> for the next clip — don’t invent the next start from text alone.
     </div>
 
     <div class="guide-block">
       <strong class="label">Tips &amp; edge cases</strong>
       <ul>
-        <li><strong style="color: var(--text);">Use Grok tab or Grok app</strong> — when combining / mixing the final video, work in the <strong style="color: var(--text);">Grok</strong> product (grok.com tab or the Grok app), not Grok inside the <strong style="color: var(--text);">X</strong> tab.</li>
+        <li><strong style="color: var(--text);">Scope is yours</strong> — full production cut, a few looped clips, or whatever fits your tokens and taste. You don’t need a long-form MV.</li>
+        <li><strong style="color: var(--text);">Use Grok tab or Grok app</strong> — when combining / mixing, work in the <strong style="color: var(--text);">Grok</strong> product (grok.com tab or the Grok app), not Grok inside the <strong style="color: var(--text);">X</strong> tab.</li>
+        <li><strong style="color: var(--text);">Continuity = last-frame screenshot</strong> — after a finished chain (e.g. 30s), screenshot the last frame and use it as the next clip’s start image if you want characters/scene to flow. A new start image from text alone will not stay consistent.</li>
         <li><strong style="color: var(--text);">10s default</strong> — best balance; two extensions ≈ a clean 30s scene.</li>
-        <li><strong style="color: var(--text);">15s</strong> — fewer chains for longer takes; full chain is 45s (heavier per clip).</li>
-        <li><strong style="color: var(--text);">6s</strong> — snappier cuts / more scene changes; full chain is 18s.</li>
-        <li><strong style="color: var(--text);">Scene continuity</strong> — last frame of chain A → start image for chain B so Grok can combine clips cleanly.</li>
-        <li><strong style="color: var(--text);">Try the form</strong> — use <em>Load example</em> for the Report Card sample (based on a finished Grok music video), then Generate.</li>
+        <li><strong style="color: var(--text);">15s / 6s</strong> — longer takes vs snappier cuts (full chains 45s / 18s).</li>
+        <li><strong style="color: var(--text);">Try the form</strong> — use <em>Load example</em> for the Report Card sample, then Generate.</li>
       </ul>
     </div>
   </div>
@@ -1036,13 +1037,16 @@ The pack must include, in order, with clear labels:
   - Start image prompt (Scene 1 from concept/refs; later scenes note last-frame handoff + optional new keyframe prompt)
   - Base video prompt (${base}s) in a fenced paste-ready block
   - Extension prompts if planned (1 for ${mid}s scenes, 2 for ${full}s scenes) — each in its own fenced block
-  - Boundary note: save last frame → next scene start image
+  - Boundary note: screenshot last frame of finished chain → use that still as next clip start image (if continuity wanted)
 - Style lock reminder at the end
+- Before assembly: confirm order of operations with the user (what to combine / loop / skip)
 
 Rules inside the pack:
 - Extension prompts = same-scene motion/content only. NEVER last-frame / new-scene language in extensions.
 - Last-frame handoff language only in boundary notes between scenes.
+- For continuity across chains: USER screenshots the last frame of the completed clip chain and uses that image as the next start — do NOT invent the next start image from text alone when they want flow.
 - User may still ask to generate assets one at a time from the pack; the pack itself is the full reference.
+- Scope is flexible: full cut, fewer scenes, or looped clips — respect token budget and user preference.
 
 Do NOT generate every image/video automatically unless the user asks — deliver the copy-ready pack after outline approval, then generate only what they request.`;
       }
@@ -1077,12 +1081,13 @@ After delivering the pack, ask which asset to generate first (title card image, 
 
 ### 3. GENERATE FROM THE PACK (on request)
 When the user picks an item, generate that still or clip only, then wait for the next request.
-At each scene boundary (when finishing a chain), remind them to save the last frame for the next scene’s start image.
+At each scene boundary (when finishing a chain), remind them: screenshot the last frame of that completed clip and use it as the starting image for the next clip if they want continuity. Do not prompt-generate a fresh start still for continuity.
+Before final assembly, confirm order of operations (which clips, order, loops, what to skip).
 
 Extension rules (always):
 - Same scene, continuous motion only.
 - NEVER “use last frame as starting image” or cross-scene language inside extension prompts.
-- Last-frame handoff only in boundary notes between scenes.`;
+- Last-frame screenshot handoff only in boundary notes between chains.`;
       }
 
       return `### 2. TITLE CARD — after outline approval
@@ -1132,20 +1137,24 @@ Extension rules:
 - Grok’s built-in extend continues the clip — prompts describe what happens next in the motion, not how to re-seed the image.
 - After each extension prompt (or generated extend), wait for approval before the next extension.
 
-### 6. SCENE BOUNDARY HANDOFF
-When this scene’s planned length is reached (after base, or after its last extension):
+### 6. SCENE BOUNDARY HANDOFF (continuity critical)
+When this scene’s planned length is reached (after base, or after its last extension — e.g. a full ${full}s chain):
 - STOP extending this chain.
 - Tell the user clearly:
-  1. Save / capture the **last frame** of this finished clip.
-  2. Use that still as the **starting image** for the NEXT scene’s video (so separate chains combine cleanly into one music video).
-- Do not start the next scene until they confirm they have the last frame (or say to proceed).
+  1. **Screenshot the last frame** of this finished clip (the final frame of the completed chain).
+  2. Use that screenshot as the **starting image** for the NEXT clip if they want characters and scene to flow together.
+  3. Do **not** rely on a new text-only image prompt for the next start when continuity matters — that breaks character/scene consistency. Last-frame screenshot is the method.
+- Do not start the next scene until they confirm they have the screenshot (or they choose a hard cut / no continuity).
 
 ### 7. NEXT SCENES (repeat 3–6)
 For each remaining scene, in order:
-1. Start image only (from last-frame handoff and/or a new keyframe as planned) → wait
+1. Start image: prefer the **last-frame screenshot** from the previous chain when continuity is wanted → wait
 2. One copy-ready base video prompt (${base}s) → wait
 3. Extension prompts one at a time if planned (up to 2 for a ${full}s scene) → wait after each
 4. Boundary handoff → next scene
+
+### 8. BEFORE ASSEMBLY
+Before combining / mixing the final video (or a short loop set), confirm order of operations with the user: clip list and order, what to loop or omit, aspect ratio already locked, working in Grok tab/app not X. Then assemble only what they approved.
 
 Never jump ahead. Never batch future scenes unless the user asks to switch to a full prompt pack.`;
     }
@@ -1228,13 +1237,14 @@ Style: Minimal, high-contrast, centered or elegantly placed white sans-serif tex
 
       const prompt = `You are helping produce a clean, consistent music video using Grok Imagine (image) + Grok video generation.
 
-The user has (or will have) a finished track (.mp3 / .wav). Your job is to plan and generate a full, consistent music video with Grok Imagine — stills, clips, in-scene extensions, and combining the video pieces into one coherent sequence matched to their song.
+The user has (or will have) a finished track (.mp3 / .wav). Help them plan and generate music-video visuals with Grok Imagine — stills, clips, in-scene extensions, and (when they want) combining pieces in Grok.
 
 ## PRODUCTION NOTES
-- Goal: a complete music video, not a pile of disconnected clips. Generate and combine scenes so the final video works as one piece.
-- Important: when mixing / combining the final video, the user should use the Grok product (grok.com tab or the Grok app) — not Grok inside the X (Twitter) tab. Remind them once if they seem to be working from X.
+- Scope is flexible: a full production cut, a shorter piece, or a few looped clips — whatever fits their tokens, time, and taste. Do not force a long-form MV.
+- Before assembling / mixing, confirm order of operations with the user (clip order, loops, skips).
+- When mixing / combining, they should use the Grok product (grok.com tab or the Grok app) — not Grok inside the X (Twitter) tab. Remind them once if they seem to be working from X.
 - Clip length guide: 10s = best default (two extensions ≈ 30s scene). 15s = longer takes, fewer chains (full chain 45s). 6s = snappier cuts, more chains (full chain 18s). Current selection: ${base}s base → plan in ${blocks}s blocks.
-- Prefer scene changes at finished clip-chain boundaries; use last-frame handoffs so consecutive chains combine cleanly.
+- Continuity between clip chains: USER screenshots the last frame of the finished chain and uses that image as the next clip’s start. That is how characters/scene stay consistent. Do not replace that with a fresh text-prompted start image when they want flow.
 
 ## CLIP MODEL
 Preferred base length: ${base}s (Grok Imagine supports 6s / 10s / 15s — use this unless intake changes it).
@@ -1242,10 +1252,10 @@ Preferred base length: ${base}s (Grok Imagine supports 6s / 10s / 15s — use th
 - Each scene is ONE clip chain: ${base}s base video → optional Extension 1 → optional Extension 2.
 - Scene totals: ${base}s (base only) | ${mid}s (base + 1 ext) | ${full}s (base + 2 ext).
 - Example: a ${full}s scene = ${base}s base + TWO extension prompts (${base} + ${base} + ${base}).
-- Plan the full video in ${blocks}s scene blocks.
+- Plan in ${blocks}s scene blocks (user may use fewer scenes or loops).
 - Extensions stay inside the SAME scene. Never put last-frame / “continue from ending image” language in extension prompts.
 - New scenes begin only when a clip chain is finished.
-- Between separate clip chains, the USER captures the last frame of the finished clip and uses it as the starting image for the next scene’s video. Mention that handoff only at scene boundaries — never inside extension prompts.
+- Between separate clip chains (if continuity is wanted): the USER takes a **screenshot of the last frame** of the completed clip and uses that still as the starting image for the next clip. Mention that handoff only at scene boundaries — never inside extension prompts. Do not invent the next start frame from text alone when continuity matters.
 
 ${workflowRules}
 
@@ -1320,7 +1330,7 @@ Also:
 - Same character(s), lighting, color grade, and art style across the whole video.
 - Honor intake reference images / graphics.
 - Camera feels continuous within a scene; at scene boundaries a deliberate framing shift is fine if it still matches the style lock.
-- Keep aiming at one finished music video: continuous style, clean scene joins, and a timeline that covers the full track.
+- Prefer continuous style within what they choose to make; clean joins via last-frame screenshots when they want flow; respect a shorter or looped scope.
 
 ## START NOW
 Begin with the INTAKE step only. Do not generate images or the outline until intake is complete (or the user confirms defaults).`;
