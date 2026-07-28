@@ -927,6 +927,7 @@
         'Readable report card gags (all D grades + “too woke / difficulty telling the truth” parent note). Hand-off of the paper from teacher to student. Keep the same classroom and the same kid. End on a clean hold / title card.';
       document.getElementById('clipLength').value = '10';
       document.getElementById('titleCardMode').value = 'auto';
+      document.getElementById('aspectRatio').value = '16:9';
       const guided = document.querySelector('input[name="workflowMode"][value="guided"]');
       if (guided) guided.checked = true;
       document.getElementById('mood').value =
@@ -1157,6 +1158,7 @@ Never jump ahead. Never batch future scenes unless the user asks to switch to a 
       const mustInclude = document.getElementById('mustInclude').value.trim();
       const clipLength = document.getElementById('clipLength').value || '10';
       const titleCardMode = document.getElementById('titleCardMode').value || 'auto';
+      const aspectRatio = document.getElementById('aspectRatio').value || 'ask';
       const workflowMode = getWorkflowMode();
       const mood = document.getElementById('mood').value.trim() || '[Describe overall aesthetic]';
       const styleLock = document.getElementById('styleLock').value.trim();
@@ -1170,12 +1172,13 @@ Never jump ahead. Never batch future scenes unless the user asks to switch to a 
       const assetsLine = assets || '(not provided — ask the user)';
       const mustIncludeLine = mustInclude || '(not provided — ask the user)';
       const titleCardLine = titleCardModeLabel(titleCardMode);
+      const aspectLine = aspectRatioLabel(aspectRatio);
       const runtimeProvided = Boolean(document.getElementById('runtime').value.trim());
       const workflowLabel =
         workflowMode === 'pack' ? 'Full prompt pack' : 'Guided step-by-step';
 
       const intakeCompleteHint =
-        assets && mustInclude && titleCardMode !== 'ask'
+        assets && mustInclude && titleCardMode !== 'ask' && aspectRatio !== 'ask'
           ? 'Most intake fields are already filled. Briefly confirm them with the user, then proceed to OUTLINE ONLY. Do not re-ask answered questions unless they want to change something.'
           : 'Ask only for items still marked “not provided” or “ask”. Wait for replies (or “none / use defaults”) before the outline.';
 
@@ -1255,6 +1258,7 @@ Already provided (treat as answers; only re-ask if the user wants to revise):
 - Starting images / graphics: ${assetsLine}
 - Must-include notes / lyric moments: ${mustIncludeLine}
 - Preferred clip length: ${base}s → scene blocks ${blocks}s
+- Aspect ratio: ${aspectLine}${aspectRatio === 'ask' ? ' — MUST ask before any image' : ' — lock this for all stills/clips'}
 - Workflow style: ${workflowLabel}
 - Target runtime: ≈ ${runtime} seconds${runtimeProvided ? '' : ' (default — confirm with user)'}
 - Title card preference: ${titleCardLine}
@@ -1266,8 +1270,15 @@ If anything is still missing, ask (skip answered items):
 3. Clip length: 6s, 10s (recommended for ~${full}s scenes with two extensions), or 15s?
 4. Confirm target runtime / song length if needed.
 5. Title card: auto black + white text for “${songName}” / “${artist}”, or user-supplied art?
+6. Desired aspect ratio for the whole video (and any provided start images): 16:9 widescreen, 9:16 vertical, 1:1 square, or 3:2?
 
 Do NOT generate images or the outline until intake is complete (or the user says proceed with defaults).
+
+### ASPECT RATIO GATE (before any image)
+Before generating the title card, Scene 1 start image, or accepting/using a user-provided start image, confirm aspect ratio is locked:
+- Choices: **16:9** (widescreen), **9:16** (vertical), **1:1** (square), **3:2** (classic photo).
+- If still unknown, ask now and wait — do not generate or import the first image until they choose.
+- Once chosen, use that ratio for every still and video clip unless the user explicitly changes it.
 
 ### 1. OUTLINE ONLY — still no images
 After intake, output a structured plan only. Wait for approval / edits before any generation or prompt pack.
@@ -1335,6 +1346,7 @@ Begin with the INTAKE step only. Do not generate images or the outline until int
       document.getElementById('mustInclude').value = '';
       document.getElementById('clipLength').value = '10';
       document.getElementById('titleCardMode').value = 'auto';
+      document.getElementById('aspectRatio').value = 'ask';
       const guided = document.querySelector('input[name="workflowMode"][value="guided"]');
       if (guided) guided.checked = true;
       document.getElementById('mood').value = '';
