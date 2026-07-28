@@ -96,6 +96,7 @@ Grok asks (or confirms what you pre-filled):
 ## Tips & edge cases
 
 - **Goal** — a full music video: generate clips and combine them into one consistent sequence for your track
+- **Use Grok tab or Grok app** when mixing the final video — not Grok inside the **X** tab
 - **10s** is the practical default; use **15s** for longer continuous shots, **6s** for faster montage
 - **Scene joins** — capture last frame at scene boundaries so the next chain starts cleanly
 - **Load example** fills a **Report Card** demo (~1:37, 10s guided) and reveals a link to the [finished video on X](https://x.com/medicinalsheep/status/2081793904970731770?s=20) (made with an **earlier process** — style reference only, not a 1:1 guide to this tool’s current prompts)
