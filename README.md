@@ -102,7 +102,9 @@ Grok asks (or confirms what you pre-filled):
 - **Use Grok tab or Grok app** when mixing — not Grok inside the **X** tab
 - **Continuity** — screenshot last frame of each finished chain for the next start; text-only next starts break consistency
 - **10s** is the practical default; use **15s** for longer takes, **6s** for snappier cuts
-- **Load example** fills a **Report Card** demo (~1:37, 10s guided) and reveals a link to the [finished video on X](https://x.com/medicinalsheep/status/2081793904970731770?s=20) (made with an **earlier process** — style reference only)
+- **Load example** fills a **Report Card** demo (~1:32, 10s guided; clean 10/20/30 scene math) and reveals a link to the [finished video on X](https://x.com/medicinalsheep/status/2081793904970731770?s=20) (made with an **earlier process** — style reference only)
+- **Copy link for Grok** includes: use Grok app/web (not X), intake first, last-frame screenshots for continuity
+- Soft **timeline check** compares scene time ranges to target runtime (warning only — loops/short cuts are fine)
 
 ## Local
 
