@@ -36,10 +36,10 @@ You have an `.mp3` or `.wav` ready and want planned scenes, a locked visual styl
 
 ## What you’ll need
 
-- Finished track (`.mp3` / `.wav`) for the final edit — Grok makes visuals; you sync audio in your editor
+- Finished track (`.mp3` / `.wav`) — the song the music video is built for
 - Song name, artist, and a rough mood / aesthetic
 - Optional: reference images, character art, logos, lyric notes
-- A video editor (CapCut, DaVinci Resolve, Premiere, etc.)
+- Grok Imagine for stills, clips, extensions, and combining the video sequence
 
 ## Form sections
 
@@ -95,9 +95,9 @@ Grok asks (or confirms what you pre-filled):
 
 ## Tips & edge cases
 
-- **No audio in Grok** — export clips, then lay your track underneath in an editor
+- **Goal** — a full music video: generate clips and combine them into one consistent sequence for your track
 - **10s** is the practical default; use **15s** for longer continuous shots, **6s** for faster montage
-- **Stitch carefully** — always capture last frame at scene boundaries
+- **Scene joins** — capture last frame at scene boundaries so the next chain starts cleanly
 - **Load example** fills a **Report Card** demo (~1:37, 10s guided) and reveals a link to the [finished video on X](https://x.com/medicinalsheep/status/2081793904970731770?s=20) (made with an **earlier process** — style reference only, not a 1:1 guide to this tool’s current prompts)
 
 ## Local

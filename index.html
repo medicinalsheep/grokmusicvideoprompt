@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GrokMusicVideoPrompt</title>
-  <meta name="description" content="Structured prompt architect for consistent Grok Imagine music videos. Plan scenes, generate clips, stitch to your track." />
+  <meta name="description" content="Structured prompt architect for consistent Grok Imagine music videos. Plan scenes, generate clips, and combine them into one video for your track." />
   <meta name="theme-color" content="#00ff9d" />
 
   <!-- Icons -->
@@ -629,8 +629,8 @@
       You already have a finished song as an <strong style="color: var(--text);">.mp3</strong> or
       <strong style="color: var(--text);">.wav</strong> file, and you want to make a music video with
       <strong style="color: var(--text);">Grok Imagine</strong> — planned scenes, matching style, and
-      clips you can stitch together in your editor. This tool builds the structured prompt that keeps
-      that workflow consistent.
+      clips Grok can generate and combine into one consistent music video. This tool builds the
+      structured prompt that keeps that workflow consistent.
     </p>
 
     <h2 style="margin-top: 1.5rem;">How to use</h2>
@@ -662,10 +662,10 @@
     <div class="guide-block">
       <strong class="label">What you’ll need</strong>
       <ul>
-        <li>Your finished track (<code>.mp3</code> or <code>.wav</code>) for the final edit — Grok generates visuals, not the mixed audio bed</li>
+        <li>Your finished track (<code>.mp3</code> or <code>.wav</code>) — the song the music video is built for</li>
         <li>Song name, artist, and a rough visual mood</li>
         <li>Optional but helpful: reference stills, character art, logos, lyric notes, or “must include” moments</li>
-        <li>A video editor (CapCut, DaVinci Resolve, etc.) to line clips up with the audio</li>
+        <li>Grok Imagine for stills, clips, extensions, and combining the video sequence</li>
       </ul>
     </div>
 
@@ -686,11 +686,10 @@
     <div class="guide-block">
       <strong class="label">Tips &amp; edge cases</strong>
       <ul>
-        <li><strong style="color: var(--text);">No audio in Grok</strong> — visuals only. Lay the <code>.mp3</code>/<code>.wav</code> under clips in CapCut, DaVinci Resolve, Premiere, etc.</li>
         <li><strong style="color: var(--text);">10s default</strong> — best balance; two extensions ≈ a clean 30s scene.</li>
         <li><strong style="color: var(--text);">15s</strong> — fewer chains for longer takes; full chain is 45s (heavier per clip).</li>
         <li><strong style="color: var(--text);">6s</strong> — snappier cuts / more scene changes; full chain is 18s.</li>
-        <li><strong style="color: var(--text);">Stitching</strong> — last frame of chain A → start image for chain B so cuts don’t jump.</li>
+        <li><strong style="color: var(--text);">Scene continuity</strong> — last frame of chain A → start image for chain B so Grok can combine clips cleanly.</li>
         <li><strong style="color: var(--text);">Try the form</strong> — use <em>Load example</em> for the Report Card sample (based on a finished Grok music video), then Generate.</li>
       </ul>
     </div>
@@ -1118,7 +1117,7 @@ When this scene’s planned length is reached (after base, or after its last ext
 - STOP extending this chain.
 - Tell the user clearly:
   1. Save / capture the **last frame** of this finished clip.
-  2. Use that still as the **starting image** for the NEXT scene’s video (so separate chains stitch cleanly in the editor).
+  2. Use that still as the **starting image** for the NEXT scene’s video (so separate chains combine cleanly into one music video).
 - Do not start the next scene until they confirm they have the last frame (or say to proceed).
 
 ### 7. NEXT SCENES (repeat 3–6)
@@ -1207,12 +1206,12 @@ Style: Minimal, high-contrast, centered or elegantly placed white sans-serif tex
 
       const prompt = `You are helping produce a clean, consistent music video using Grok Imagine (image) + Grok video generation.
 
-The user has (or will have) a finished track (.mp3 / .wav). You plan visuals and generate stills/clips; they sync audio in their editor later.
+The user has (or will have) a finished track (.mp3 / .wav). Your job is to plan and generate a full, consistent music video with Grok Imagine — stills, clips, in-scene extensions, and combining the video pieces into one coherent sequence matched to their song.
 
 ## PRODUCTION NOTES
-- Grok does NOT mix or attach the song audio. Visuals only — user lays .mp3/.wav under clips in an editor (CapCut, DaVinci, Premiere, etc.).
+- Goal: a complete music video, not a pile of disconnected clips. Generate and combine scenes so the final video works as one piece.
 - Clip length guide: 10s = best default (two extensions ≈ 30s scene). 15s = longer takes, fewer chains (full chain 45s). 6s = snappier cuts, more chains (full chain 18s). Current selection: ${base}s base → plan in ${blocks}s blocks.
-- Prefer scene changes at finished clip-chain boundaries so the user can stitch with last-frame handoffs.
+- Prefer scene changes at finished clip-chain boundaries; use last-frame handoffs so consecutive chains combine cleanly.
 
 ## CLIP MODEL
 Preferred base length: ${base}s (Grok Imagine supports 6s / 10s / 15s — use this unless intake changes it).
@@ -1290,7 +1289,7 @@ Also:
 - Same character(s), lighting, color grade, and art style across the whole video.
 - Honor intake reference images / graphics.
 - Camera feels continuous within a scene; at scene boundaries a deliberate framing shift is fine if it still matches the style lock.
-- Remind the user once (near the end of the outline or first generation) that final audio sync happens in their editor — not inside Grok.
+- Keep aiming at one finished music video: continuous style, clean scene joins, and a timeline that covers the full track.
 
 ## START NOW
 Begin with the INTAKE step only. Do not generate images or the outline until intake is complete (or the user confirms defaults).`;
