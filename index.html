@@ -747,6 +747,16 @@
       </div>
     </div>
 
+    <label for="aspectRatio">Aspect ratio</label>
+    <select id="aspectRatio" style="max-width: 420px;">
+      <option value="ask" selected>Ask me before the first image</option>
+      <option value="16:9">16:9 — widescreen</option>
+      <option value="9:16">9:16 — vertical</option>
+      <option value="1:1">1:1 — square</option>
+      <option value="3:2">3:2 — classic photo</option>
+    </select>
+    <p class="hint">Lock this before the title card / Scene 1 image (and when using a provided start image).</p>
+
     <label style="margin-top: 1.25rem;">Workflow style</label>
     <div class="choice-grid" role="radiogroup" aria-label="Workflow style">
       <label class="choice-card">
@@ -951,6 +961,14 @@
       if (mode === 'user') return 'User will supply title art / graphics';
       if (mode === 'ask') return 'Ask the user in chat';
       return 'Auto — pure black background with clean white text';
+    }
+
+    function aspectRatioLabel(value) {
+      if (value === '16:9') return '16:9 widescreen';
+      if (value === '9:16') return '9:16 vertical';
+      if (value === '1:1') return '1:1 square';
+      if (value === '3:2') return '3:2 classic photo';
+      return 'Ask before the first image';
     }
 
     function getWorkflowMode() {

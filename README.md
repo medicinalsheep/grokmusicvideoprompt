@@ -57,6 +57,7 @@ Grok asks (or confirms what you pre-filled):
 3. Preferred clip length: **6s**, **10s**, or **15s**
 4. Target runtime
 5. Title card: auto black/white text, or your own art?
+6. Aspect ratio (**before first image**): **16:9**, **9:16**, **1:1**, or **3:2**
 
 ## Clip length
 
