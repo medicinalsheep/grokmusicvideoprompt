@@ -750,9 +750,10 @@
           <ul>
             <li><strong style="color: var(--text);">Scope is yours</strong> — full production cut, a few looped clips, or whatever fits your tokens and taste. You don’t need a long-form MV.</li>
             <li><strong style="color: var(--text);">Use Grok tab or Grok app</strong> — when combining / mixing, work in the <strong style="color: var(--text);">Grok</strong> product (grok.com tab or the Grok app), not Grok inside the <strong style="color: var(--text);">X</strong> tab.</li>
-            <li><strong style="color: var(--text);">Continuity = last-frame screenshot</strong> — after a finished chain (e.g. 30s), screenshot the last frame and use it as the next clip’s start image if you want characters/scene to flow. A new start image from text alone will not stay consistent.</li>
-            <li><strong style="color: var(--text);">10s default</strong> — best balance; two extensions ≈ a clean 30s scene.</li>
-            <li><strong style="color: var(--text);">15s / 6s</strong> — longer takes vs snappier cuts (full chains 45s / 18s).</li>
+            <li><strong style="color: var(--text);">Two consistency layers</strong> — (1) re-attach multi-image character/location refs in Imagine when you can; (2) <strong style="color: var(--text);">screenshot the last frame</strong> of a finished chain for the next start. Refs help identity; last-frame keeps shot flow. Text-only next starts break consistency.</li>
+            <li><strong style="color: var(--text);">Voice ref (optional)</strong> — for character speech if Imagine offers it; your song file is still the music bed.</li>
+            <li><strong style="color: var(--text);">No BPM analysis in this page</strong> — Grok won’t get automatic beat maps from the tool; you sketch sections/timing.</li>
+            <li><strong style="color: var(--text);">10s default</strong> — best balance; two extensions ≈ a clean 30s scene. <strong style="color: var(--text);">15s</strong> fewer gens; <strong style="color: var(--text);">6s</strong> montage/loops.</li>
             <li><strong style="color: var(--text);">Try the form</strong> — use <em>Load example</em> for the Report Card sample, then Generate.</li>
           </ul>
         </div>
@@ -784,22 +785,27 @@
       Optional — pre-fill these so Grok skips re-asking. Leave blank and Grok will ask during intake.
     </p>
 
-    <label for="assets">Starting images / graphics</label>
-    <textarea id="assets" placeholder="e.g. I’ll attach a character reference (silver hair, black jacket). Logo PNG for end card. No location photos yet."></textarea>
-    <p class="hint">Describe what you’ll attach or already have: character art, locations, logos, title art, style refs.</p>
+    <label for="assets">Starting images / multi-refs</label>
+    <textarea id="assets" placeholder="e.g. I’ll attach up to ~7 Imagine refs: face + full body, black jacket, alley location. Logo for end card."></textarea>
+    <p class="hint">Character / wardrobe / location stills to re-attach in Grok Imagine (multi-ref, when available). Describe or list what you’ll attach.</p>
+
+    <label for="voiceRef">Voice ref (optional)</label>
+    <textarea id="voiceRef" placeholder="e.g. None — instrumental track. Or: attach a short voice sample for the lead if doing lip-sync-ish bits."></textarea>
+    <p class="hint">Optional Imagine voice reference. Song audio is still your .mp3/.wav; voice ref is for character speech consistency if you use it.</p>
 
     <label for="mustInclude">Must-include notes / lyric moments</label>
     <textarea id="mustInclude" placeholder="e.g. Chorus: neon rain on the character’s face. Bridge: hard cut to empty rooftop. Include the lyric “static forever” as on-screen text once."></textarea>
+    <p class="hint">This tool does not analyze BPM or the audio file — map beats/sections yourself (or roughly in chat).</p>
 
     <div class="row">
       <div>
         <label for="clipLength">Preferred clip length</label>
         <select id="clipLength">
-          <option value="10" selected>10 seconds (recommended — 10 / 20 / 30s scenes)</option>
-          <option value="6">6 seconds (6 / 12 / 18s scenes)</option>
-          <option value="15">15 seconds (15 / 30 / 45s scenes)</option>
+          <option value="10" selected>10 seconds (default — 10 / 20 / 30s scenes)</option>
+          <option value="15">15 seconds (longer takes — 15 / 30 / 45s)</option>
+          <option value="6">6 seconds (snappy — 6 / 12 / 18s)</option>
         </select>
-        <p class="hint" id="clipLengthHint">Grok Imagine supports 6s, 10s, and 15s. Plan scenes in 10 / 20 / 30s blocks (base + up to 2 extensions).</p>
+        <p class="hint" id="clipLengthHint">Planning defaults for Grok Imagine’s duration options (use the slider on your surface). 10s default; 15s fewer gens; 6s montage/loops.</p>
       </div>
       <div>
         <label for="titleCardMode">Title card</label>
@@ -811,15 +817,37 @@
       </div>
     </div>
 
-    <label for="aspectRatio">Aspect ratio</label>
-    <select id="aspectRatio" style="max-width: 420px;">
-      <option value="ask" selected>Ask me before the first image</option>
-      <option value="16:9">16:9 — widescreen</option>
-      <option value="9:16">9:16 — vertical</option>
-      <option value="1:1">1:1 — square</option>
-      <option value="3:2">3:2 — classic photo</option>
+    <div class="row">
+      <div>
+        <label for="aspectRatio">Aspect ratio</label>
+        <select id="aspectRatio">
+          <option value="ask" selected>Ask me before the first image</option>
+          <option value="16:9">16:9 — widescreen</option>
+          <option value="9:16">9:16 — vertical</option>
+          <option value="1:1">1:1 — square</option>
+          <option value="3:2">3:2 — classic photo</option>
+        </select>
+        <p class="hint">Lock before title card / Scene 1 (and when using a provided start image).</p>
+      </div>
+      <div>
+        <label for="budgetMode">Project scope / compute</label>
+        <select id="budgetMode">
+          <option value="ask" selected>Ask me in chat</option>
+          <option value="light">Light — few clips / loops, save tokens</option>
+          <option value="medium">Medium — short cut, selective scenes</option>
+          <option value="full">Full — cover the track as planned</option>
+        </select>
+        <p class="hint">Video uses more of the weekly compute pool. Match plan length to budget.</p>
+      </div>
+    </div>
+
+    <label for="resolutionPref">Resolution preference</label>
+    <select id="resolutionPref" style="max-width: 420px;">
+      <option value="ask" selected>Ask / use whatever my Grok surface offers</option>
+      <option value="720">Prefer 720p if available</option>
+      <option value="1080">Prefer 1080p if available</option>
     </select>
-    <p class="hint">Lock this before the title card / Scene 1 image (and when using a provided start image).</p>
+    <p class="hint">Higher res costs more compute; availability varies by plan and surface.</p>
 
     <label style="margin-top: 1.25rem;">Workflow style</label>
     <div class="choice-grid" role="radiogroup" aria-label="Workflow style">
@@ -968,8 +996,9 @@
         `I have a finished track (.mp3 / .wav) and want a consistent Grok Imagine music video${songBit}. ` +
         `Please use this tool/workflow to help me plan and generate it step by step:\n${LIVE_TOOL_URL}\n\n` +
         `Work in the Grok product (grok.com tab or Grok app) — not Grok inside the X tab — especially when combining clips.\n` +
-        `Start with intake (assets, clip length 6/10/15s, aspect ratio, title card), then outline only — no images until I approve the plan.\n` +
-        `For continuity between clip chains: I’ll screenshot the last frame of each finished chain and use it as the next clip’s starting image (don’t invent next starts from text alone).`;
+        `Start with intake (multi-image refs, optional voice ref, clip length 6/10/15s, aspect ratio, scope/budget, title card), then outline only — no images until I approve the plan.\n` +
+        `This static tool does not analyze BPM or my audio file — I’ll sketch sections; don’t assume automatic beat-sync.\n` +
+        `Consistency: re-attach my image refs when generating; between chains screenshot the last frame for the next start (don’t invent next starts from text alone).`;
 
       copyText(message)
         .then(() => {
@@ -988,12 +1017,15 @@
       document.getElementById('artist').value = 'medicinalsheep';
       document.getElementById('notes').value = '2026 • Grok Imagine music video sample (~1:32)';
       document.getElementById('assets').value =
-        'Starting still: empty elementary classroom, wooden teacher desk, brass desk lamp, “5th Grade Report Card” for student “wokeGPT” (all D’s, parent note visible), green chalkboards soft in background. Character lock for Scene 2+: same boy (~10–12), brown hair, white t-shirt with bold black “ChatGPT” text; adult teacher arm in white sleeve handing the card. Continuity: screenshot last frame of each finished chain for the next start.';
+        'Multi-refs if attaching in Imagine: classroom wide, report card close-up, boy face + white ChatGPT tee, teacher arm/sleeve. Starting still: empty elementary classroom, wooden teacher desk, brass desk lamp, “5th Grade Report Card” for student “wokeGPT” (all D’s, parent note visible). Continuity: screenshot last frame of each finished chain for the next start.';
+      document.getElementById('voiceRef').value = 'None — focus on picture; song is the bed.';
       document.getElementById('mustInclude').value =
         'Readable report card gags (all D grades + “too woke / difficulty telling the truth” parent note). Hand-off of the paper from teacher to student. Keep the same classroom and the same kid. End on a clean hold / title card.';
       document.getElementById('clipLength').value = '10';
       document.getElementById('titleCardMode').value = 'auto';
       document.getElementById('aspectRatio').value = '16:9';
+      document.getElementById('budgetMode').value = 'medium';
+      document.getElementById('resolutionPref').value = 'ask';
       const guided = document.querySelector('input[name="workflowMode"][value="guided"]');
       if (guided) guided.checked = true;
       document.getElementById('mood').value =

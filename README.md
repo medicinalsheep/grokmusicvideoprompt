@@ -38,13 +38,15 @@ You have an `.mp3` or `.wav` ready and want planned scenes, a locked visual styl
 
 - Finished track (`.mp3` / `.wav`) — the song the music video is built for
 - Song name, artist, and a rough mood / aesthetic
-- Optional: reference images, character art, logos, lyric notes
+- Optional: multi-image refs (character/location), voice ref, lyric notes
 - Grok Imagine for stills, clips, extensions, and combining the video sequence
+
+**Note:** This static page does **not** analyze your audio (no BPM / beat grid). You sketch structure and times; the master prompt tells Grok to acknowledge that.
 
 ## Form sections
 
 1. **Song details** — name, artist, credits  
-2. **Starting assets & preferences** — optional pre-fill for intake (refs, must-includes, **6s / 10s / 15s** clip length, title card mode, **guided vs full prompt pack**)  
+2. **Starting assets & preferences** — multi-refs, optional voice ref, must-includes, **6s / 10s / 15s** clip length, title card, aspect ratio, **scope/compute**, resolution, **guided vs full pack**  
 3. **Visual direction** — mood + style lock  
 4. **Scene & timeline** — runtime, structure, scene breakdown (placeholders update with clip length)
 
@@ -52,24 +54,29 @@ You have an `.mp3` or `.wav` ready and want planned scenes, a locked visual styl
 
 Grok asks (or confirms what you pre-filled):
 
-1. Starting images / graphics?
-2. Must-include notes or lyric moments?
-3. Preferred clip length: **6s**, **10s**, or **15s**
-4. Target runtime
-5. Title card: auto black/white text, or your own art?
-6. Aspect ratio (**before first image**): **16:9**, **9:16**, **1:1**, or **3:2**
+1. Multi-image refs to attach in Imagine?
+2. Optional voice ref (or none)?
+3. Must-include notes / lyric moments? (user times only — no tool BPM)
+4. Preferred clip length: **6s**, **10s** (default), or **15s**
+5. Target runtime (estimate OK)
+6. Title card: auto black/white text, or your own art?
+7. Aspect ratio (**before first image**): **16:9**, **9:16**, **1:1**, or **3:2**
+8. Scope / compute: light / medium / full
+9. Resolution preference if available
 
 ## Clip length
 
 | Base | Scene blocks (base / +1 ext / +2 ext) | Best for |
 |------|----------------------------------------|----------|
-| 6s   | 6 / 12 / 18s                           | Snappy cuts, more scene changes |
+| 6s   | 6 / 12 / 18s                           | Montage, loops, token thrift |
 | 10s  | 10 / 20 / 30s                          | Default — clean 30s scenes with two extensions |
-| 15s  | 15 / 30 / 45s                          | Longer takes, fewer chains |
+| 15s  | 15 / 30 / 45s                          | Longer takes, fewer generations |
+
+Align with the **duration slider** on your Grok surface if options differ.
 
 - Extensions stay in the **same** scene (no last-frame language in extension prompts)
 - New scenes start when a clip chain ends
-- **Continuity:** screenshot the **last frame** of the finished chain (e.g. after a 30s = base + 2 ext) and use it as the next clip’s start image — do **not** text-prompt a new start still if you want characters/scene to match
+- **Consistency layers:** multi-image refs (identity) + **last-frame screenshot** between chains (shot flow) — do **not** text-prompt a new start still if you want continuity
 
 ## Workflow style
 
@@ -98,13 +105,15 @@ Grok asks (or confirms what you pre-filled):
 
 ## Tips & edge cases
 
-- **Scope** — full cut, short piece, or a few looped clips; tokens and taste decide, not the tool
+- **Scope / compute** — light / medium / full; video is expensive on shared weekly pools
 - **Use Grok tab or Grok app** when mixing — not Grok inside the **X** tab
-- **Continuity** — screenshot last frame of each finished chain for the next start; text-only next starts break consistency
-- **10s** is the practical default; use **15s** for longer takes, **6s** for snappier cuts
-- **Load example** fills a **Report Card** demo (~1:32, 10s guided; clean 10/20/30 scene math) and reveals a link to the [finished video on X](https://x.com/medicinalsheep/status/2081793904970731770?s=20) (made with an **earlier process** — style reference only)
-- **Copy link for Grok** includes: use Grok app/web (not X), intake first, last-frame screenshots for continuity
-- Soft **timeline check** compares scene time ranges to target runtime (warning only — loops/short cuts are fine)
+- **Multi-refs + last-frame** — re-attach character/location refs; screenshot last frame between chains
+- **Voice ref** — optional for speech; song file remains the music bed
+- **No BPM from this tool** — Grok is told not to invent a beat grid from the page
+- **10s** default; **15s** fewer gens; **6s** montage/loops
+- **Load example** — Report Card (~1:32, 10s guided)
+- **Copy link for Grok** — app/web, intake, no-BPM note, multi-ref + last-frame
+- Soft **timeline check** on scene ranges vs target runtime
 
 ## Local
 
