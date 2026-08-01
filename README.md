@@ -41,7 +41,7 @@ You have an `.mp3` or `.wav` ready and want planned scenes, a locked visual styl
 - Optional: multi-image refs (character/location), voice ref, lyric notes
 - Grok Imagine for stills, clips, extensions, and combining the video sequence
 
-**Note:** This static page does **not** analyze your audio (no BPM / beat grid). You sketch structure and times; the master prompt tells Grok to acknowledge that.
+**Note:** This static page does not read your audio file. **In Grok chat**, attach the track so Grok can estimate **BPM** and rough structure, then plan scene times from that.
 
 ## Form sections
 
@@ -54,15 +54,18 @@ You have an `.mp3` or `.wav` ready and want planned scenes, a locked visual styl
 
 Grok asks (or confirms what you pre-filled):
 
-1. Multi-image refs to attach in Imagine?
-2. Optional voice ref (or none)?
-3. Must-include notes / lyric moments? (user times only — no tool BPM)
-4. Preferred clip length: **6s**, **10s** (default), or **15s**
-5. Target runtime (estimate OK)
-6. Title card: auto black/white text, or your own art?
-7. Aspect ratio (**before first image**): **16:9**, **9:16**, **1:1**, or **3:2**
-8. Scope / compute: light / medium / full
-9. Resolution preference if available
+1. Attach track for **BPM + structure** analysis (or confirm already attached)
+2. Multi-image refs to attach in Imagine?
+3. Optional voice ref (or none)?
+4. Must-include notes / lyric moments?
+5. Preferred clip length: **6s**, **10s** (default), or **15s**
+6. Target runtime (prefer measured length from file)
+7. Title card: auto black/white text, or your own art?
+8. Aspect ratio (**before first image**): **16:9**, **9:16**, **1:1**, or **3:2**
+9. Scope / compute: light / medium / full
+10. Resolution preference if available
+
+Then: **BPM pass** → music-aware outline → generate
 
 ## Clip length
 
@@ -87,14 +90,15 @@ Align with the **duration slider** on your Grok surface if options differ.
 
 ### Guided flow
 
-1. **Intake** — assets, notes, clip length, title card  
-2. **Outline only** — scene plan with base + extension counts (no images yet)  
-3. **Title card** — still only  
-4. **Scene 1 start image only** — do not pre-make later keyframes  
-5. **Base video prompt** — one copy-ready base-length prompt from that image  
-6. **Extension prompts** — one at a time (e.g. two extensions for a 30s scene on 10s base)  
-7. **Boundary** — screenshot last frame → next clip start image (if continuity) → repeat  
-8. **Before assembly** — confirm order of operations, then combine / loop as you prefer  
+1. **Intake** — track attach, refs, notes, clip length, title card  
+2. **BPM pass** — Grok estimates BPM / sections from the track  
+3. **Outline only** — music-aware scene plan with base + extension counts (no images yet)  
+4. **Title card** — still only  
+5. **Scene 1 start image only** — do not pre-make later keyframes  
+6. **Base video prompt** — one copy-ready base-length prompt from that image  
+7. **Extension prompts** — one at a time (e.g. two extensions for a 30s scene on 10s base)  
+8. **Boundary** — screenshot last frame → next clip start image (if continuity) → repeat  
+9. **Before assembly** — confirm order of operations, then combine / loop as you prefer  
 
 ### Full pack flow
 
@@ -109,10 +113,10 @@ Align with the **duration slider** on your Grok surface if options differ.
 - **Use Grok tab or Grok app** when mixing — not Grok inside the **X** tab
 - **Multi-refs + last-frame** — re-attach character/location refs; screenshot last frame between chains
 - **Voice ref** — optional for speech; song file remains the music bed
-- **No BPM from this tool** — Grok is told not to invent a beat grid from the page
+- **BPM in Grok** — attach the track in chat; Grok analyzes BPM/structure and plans scene times (this page only builds the prompt)
 - **10s** default; **15s** fewer gens; **6s** montage/loops
 - **Load example** — Report Card (~1:32, 10s guided)
-- **Copy link for Grok** — app/web, intake, no-BPM note, multi-ref + last-frame
+- **Copy link for Grok** — app/web, intake, BPM-on-track-attach, multi-ref + last-frame
 - Soft **timeline check** on scene ranges vs target runtime
 
 ## Local
