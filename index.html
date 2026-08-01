@@ -997,7 +997,7 @@
         `Please use this tool/workflow to help me plan and generate it step by step:\n${LIVE_TOOL_URL}\n\n` +
         `Work in the Grok product (grok.com tab or Grok app) — not Grok inside the X tab — especially when combining clips.\n` +
         `Start with intake (multi-image refs, optional voice ref, clip length 6/10/15s, aspect ratio, scope/budget, title card), then outline only — no images until I approve the plan.\n` +
-        `This static tool does not analyze BPM or my audio file — I’ll sketch sections; don’t assume automatic beat-sync.\n` +
+        `When I attach my track, analyze BPM and rough song structure first, then plan scene times and clip chains accordingly.\n` +
         `Consistency: re-attach my image refs when generating; between chains screenshot the last frame for the next start (don’t invent next starts from text alone).`;
 
       copyText(message)
@@ -1408,10 +1408,12 @@ Style: Minimal, high-contrast, centered or elegantly placed white sans-serif tex
 
 The user has (or will have) a finished track (.mp3 / .wav). Help them plan and generate music-video visuals with Grok Imagine — stills, clips, in-scene extensions, and (when they want) combining pieces in Grok.
 
-## IMPORTANT LIMITS (acknowledge once, early)
-- The static GrokMusicVideoPrompt tool does **not** read, analyze, or beat-map the user’s audio file. There is **no automatic BPM, downbeat, or waveform analysis** from the tool.
-- You must **not** pretend the tool supplied a beat grid. Timing comes only from: user-stated runtime, song structure text, scene sketch, and anything the user types or attaches in chat.
-- If beat-sync matters, ask them for rough section times or a simple map (e.g. “chorus ~0:45”) — do not invent precise BPM unless they provide it.
+## AUDIO / BPM (do this early)
+- The static GrokMusicVideoPrompt **page** cannot read the audio file. **You** (Grok) should analyze the track when the user attaches or provides it in chat.
+- **As soon as the track is available**, estimate **BPM**, approximate duration, and rough structure (intro / verse / chorus / bridge / outro or equivalent energy shifts). State those findings briefly (e.g. “~128 BPM, ~3:10, chorus ~0:48”).
+- **Plan the outline from that analysis** — place scene boundaries and clip-chain lengths so visual changes land on sensible musical moments when possible. Prefer aligning longer chains and hard cuts to section changes or strong downbeats over arbitrary clocks.
+- If the track is **not** attached yet, ask for it (or a link/file) before locking the final outline. You may draft a provisional plan from user-stated runtime/structure, then **revise after BPM analysis**.
+- If analysis is uncertain, say so, give a best-effort BPM range, and let the user correct it. Prefer their corrections over a bad grid.
 - Features (max clip length, 1080p, multi-ref count, voice ref, extend, upscale) can vary by plan and surface (prefer grok.com / Grok app, not X). Use what their surface actually offers; treat 6/10/15s as planning defaults tied to the duration slider.
 
 ## PRODUCTION NOTES
@@ -1456,23 +1458,30 @@ Already provided (treat as answers; only re-ask if the user wants to revise):
 - Project scope / compute: ${budgetLine}
 - Resolution preference: ${resolutionLine}
 - Workflow style: ${workflowLabel}
-- Target runtime: ≈ ${runtime} seconds${runtimeProvided ? '' : ' (default — confirm with user; not BPM-derived)'}
+- Target runtime: ≈ ${runtime} seconds${runtimeProvided ? '' : ' (default — confirm; refine after track BPM analysis)'}
 - Title card preference: ${titleCardLine}
 - Song: ${songName} — ${artist}
-- Audio analysis from the static tool: **none** (no BPM / beat grid)
+- BPM / structure from the static page: **none** — analyze when the user attaches the track in this chat
 
 If anything is still missing, ask (skip answered items):
-1. Multi-image refs to attach in Imagine (character, wardrobe, location — up to what the product allows)? Describe or confirm attachments.
-2. Optional voice ref for character speech, or none?
-3. Notes, lyric highlights, or “must include” moments? (User-supplied times only — no tool BPM.)
-4. Clip length: 6s, 10s (default for ~${full}s scenes with two extensions when base is 10s), or 15s?
-5. Confirm target runtime / rough song length if needed (estimate OK; not automatic from file).
-6. Title card: auto black + white text for “${songName}” / “${artist}”, or user-supplied art?
-7. Aspect ratio: 16:9, 9:16, 1:1, or 3:2?
-8. Scope / compute: light (loops/few clips), medium, or full track coverage?
-9. Resolution preference if their surface offers a choice?
+1. Please attach the finished track (.mp3 / .wav) so you can analyze BPM and rough structure (or confirm if already attached).
+2. Multi-image refs to attach in Imagine (character, wardrobe, location — up to what the product allows)? Describe or confirm attachments.
+3. Optional voice ref for character speech, or none?
+4. Notes, lyric highlights, or “must include” moments (with times if known)?
+5. Clip length: 6s, 10s (default for ~${full}s scenes with two extensions when base is 10s), or 15s?
+6. Confirm target runtime / song length if needed (prefer measured length from the file once attached).
+7. Title card: auto black + white text for “${songName}” / “${artist}”, or user-supplied art?
+8. Aspect ratio: 16:9, 9:16, 1:1, or 3:2?
+9. Scope / compute: light (loops/few clips), medium, or full track coverage?
+10. Resolution preference if their surface offers a choice?
 
-Do NOT generate images or the outline until intake is complete (or the user says proceed with defaults).
+Do NOT generate images until intake is complete (or the user says proceed with defaults). Prefer having the track + BPM read before locking the outline; a provisional outline is OK if they want to plan first.
+
+### BPM PASS (when track is available — before locking outline)
+1. Analyze / estimate BPM, duration, and section map.
+2. Report findings to the user in a short block.
+3. Adjust scene time ranges and clip-chain lengths to fit the music (and their scope/budget).
+4. Wait for approval of the music-aware outline before title card / first image.
 
 ### ASPECT RATIO GATE (before any image)
 Before generating the title card, Scene 1 start image, or accepting/using a user-provided start image, confirm aspect ratio is locked:
@@ -1482,7 +1491,7 @@ Before generating the title card, Scene 1 start image, or accepting/using a user
 
 ### 1. OUTLINE ONLY — still no images
 After intake, output a structured plan only. Wait for approval / edits before any generation or prompt pack.
-Acknowledge in the outline that timing is user-sketched (no BPM from the tool). Match scene count and length to their scope/budget.
+If BPM pass is done, ground the outline in that analysis (cite BPM + key section times). If not, mark times as provisional and note “pending track attach / BPM pass.” Match scene count and length to their scope/budget.
 
 Inputs to use:
 Song structure / sections:
@@ -1500,16 +1509,17 @@ ${assets || '(from intake)'}
 Voice ref:
 ${voiceRef || '(none / from intake)'}
 
-User’s scene sketch (target runtime ≈ ${runtime}s — not auto-derived from audio):
+User’s scene sketch (target runtime ≈ ${runtime}s — refine with file length + BPM when available):
 ${scenes}
 
 For EACH scene in the outline, include:
-- Scene number + time range on the song (e.g. 0:04–0:34) — approximate is fine unless user gave exacts
+- Scene number + time range on the song (e.g. 0:04–0:34), aligned to sections/BPM when known
 - Total duration and clip math (e.g. “${full}s = ${base}s base + 2 extensions”)
+- Musical cue (e.g. “starts on chorus downbeat ~0:48”) when BPM pass exists
 - Visual action / what happens
 - Camera language (push-in, handheld, locked-off, etc.)
 - Which multi-refs to re-attach
-- Beat map inside the chain (action beats, not BPM unless user supplied):
+- Action map inside the chain (prefer hits on beats/bars when BPM is known):
   - Base (${base}s): what motion / framing happens
   - Ext 1 (if any): how the same scene continues
   - Ext 2 (if any): how it resolves before the next scene
@@ -1532,7 +1542,7 @@ Also:
 - Optional voice ref: only when they opted in; keep song as the music bed.
 
 ## START NOW
-Begin with the INTAKE step only. Do not generate images or the outline until intake is complete (or the user confirms defaults). Briefly acknowledge: no BPM/audio analysis from the static tool.`;
+Begin with the INTAKE step only. Ask for the track early if missing. Run BPM pass when the track arrives, then lock a music-aware outline before images (unless the user explicitly wants a provisional plan first).`;
 
       document.getElementById('output').textContent = prompt;
       document.getElementById('output-section').style.display = 'block';
