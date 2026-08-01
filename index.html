@@ -1072,6 +1072,19 @@
       return 'Ask before the first image';
     }
 
+    function budgetModeLabel(value) {
+      if (value === 'light') return 'Light — few clips / loops, save tokens';
+      if (value === 'medium') return 'Medium — short cut, selective scenes';
+      if (value === 'full') return 'Full — cover the track as planned';
+      return 'Ask in chat';
+    }
+
+    function resolutionPrefLabel(value) {
+      if (value === '720') return 'Prefer 720p if available';
+      if (value === '1080') return 'Prefer 1080p if available';
+      return 'Ask / use whatever the Grok surface offers';
+    }
+
     function getWorkflowMode() {
       const selected = document.querySelector('input[name="workflowMode"]:checked');
       return selected ? selected.value : 'guided';
@@ -1099,8 +1112,8 @@ ${formatTime(t2)}–${formatTime(t3)} → Scene 3 (${full}s = ${base}s + 2 ext):
       scenesEl.placeholder = scenesPlaceholder(clipLength);
 
       document.getElementById('clipLengthHint').textContent =
-        `Grok Imagine supports 6s, 10s, and 15s. Plan scenes in ${blocks}s blocks ` +
-        `(${base}s base, optional +1 → ${mid}s, +2 → ${full}s).`;
+        `Planning default ${base}s (use the duration slider on your Grok surface). ` +
+        `Scene blocks ${blocks}s = base / +1 ext / +2 ext. 10s = balance; 15s = fewer gens; 6s = montage.`;
 
       document.getElementById('scenesHint').textContent =
         `Tip: Size each scene to ${blocks}s. Scene changes happen when a clip chain ends — not mid-extension.`;
@@ -1247,8 +1260,8 @@ Generate (or accept) the title card still only. Wait for approval. Then move to 
 
 ### 3. SCENE 1 START IMAGE ONLY
 Generate ONE keyframe still for Scene 1 (the first visual after the title card).
-- Match mood, style lock, and any intake references.
-- This image is the starting frame for Scene 1’s base video.
+- Match mood, style lock, aspect ratio, and multi-image refs from intake (re-attach refs in Imagine when available).
+- This image is the starting frame for Scene 1’s base video (prefer image-to-video next).
 - Do NOT generate Scene 2+ keyframes yet.
 - Show the image (or a precise image prompt if the user generates it themselves) and wait for approval / notes.
 
@@ -1314,10 +1327,13 @@ Never jump ahead. Never batch future scenes unless the user asks to switch to a 
       const artist = document.getElementById('artist').value.trim() || '[ARTIST]';
       const notes = document.getElementById('notes').value.trim();
       const assets = document.getElementById('assets').value.trim();
+      const voiceRef = document.getElementById('voiceRef').value.trim();
       const mustInclude = document.getElementById('mustInclude').value.trim();
       const clipLength = document.getElementById('clipLength').value || '10';
       const titleCardMode = document.getElementById('titleCardMode').value || 'auto';
       const aspectRatio = document.getElementById('aspectRatio').value || 'ask';
+      const budgetMode = document.getElementById('budgetMode').value || 'ask';
+      const resolutionPref = document.getElementById('resolutionPref').value || 'ask';
       const workflowMode = getWorkflowMode();
       const mood = document.getElementById('mood').value.trim() || '[Describe overall aesthetic]';
       const styleLock = document.getElementById('styleLock').value.trim();
@@ -1329,15 +1345,18 @@ Never jump ahead. Never batch future scenes unless the user asks to switch to a 
       const { base, mid, full, blocks } = clipBlocks(clipLength);
 
       const assetsLine = assets || '(not provided — ask the user)';
+      const voiceRefLine = voiceRef || '(not provided — ask if they want a voice ref, or none)';
       const mustIncludeLine = mustInclude || '(not provided — ask the user)';
       const titleCardLine = titleCardModeLabel(titleCardMode);
       const aspectLine = aspectRatioLabel(aspectRatio);
+      const budgetLine = budgetModeLabel(budgetMode);
+      const resolutionLine = resolutionPrefLabel(resolutionPref);
       const runtimeProvided = Boolean(document.getElementById('runtime').value.trim());
       const workflowLabel =
         workflowMode === 'pack' ? 'Full prompt pack' : 'Guided step-by-step';
 
       const intakeCompleteHint =
-        assets && mustInclude && titleCardMode !== 'ask' && aspectRatio !== 'ask'
+        assets && mustInclude && titleCardMode !== 'ask' && aspectRatio !== 'ask' && budgetMode !== 'ask'
           ? 'Most intake fields are already filled. Briefly confirm them with the user, then proceed to OUTLINE ONLY. Do not re-ask answered questions unless they want to change something.'
           : 'Ask only for items still marked “not provided” or “ask”. Wait for replies (or “none / use defaults”) before the outline.';
 
@@ -1389,15 +1408,29 @@ Style: Minimal, high-contrast, centered or elegantly placed white sans-serif tex
 
 The user has (or will have) a finished track (.mp3 / .wav). Help them plan and generate music-video visuals with Grok Imagine — stills, clips, in-scene extensions, and (when they want) combining pieces in Grok.
 
+## IMPORTANT LIMITS (acknowledge once, early)
+- The static GrokMusicVideoPrompt tool does **not** read, analyze, or beat-map the user’s audio file. There is **no automatic BPM, downbeat, or waveform analysis** from the tool.
+- You must **not** pretend the tool supplied a beat grid. Timing comes only from: user-stated runtime, song structure text, scene sketch, and anything the user types or attaches in chat.
+- If beat-sync matters, ask them for rough section times or a simple map (e.g. “chorus ~0:45”) — do not invent precise BPM unless they provide it.
+- Features (max clip length, 1080p, multi-ref count, voice ref, extend, upscale) can vary by plan and surface (prefer grok.com / Grok app, not X). Use what their surface actually offers; treat 6/10/15s as planning defaults tied to the duration slider.
+
 ## PRODUCTION NOTES
-- Scope is flexible: a full production cut, a shorter piece, or a few looped clips — whatever fits their tokens, time, and taste. Do not force a long-form MV.
+- Scope / compute: ${budgetLine}. Video burns shared weekly compute faster than chat — prefer fewer/longer clips when budget is light; do not force a long-form MV.
+- Resolution preference: ${resolutionLine}. Higher res costs more; fall back gracefully if unavailable.
 - Before assembling / mixing, confirm order of operations with the user (clip order, loops, skips).
 - When mixing / combining, they should use the Grok product (grok.com tab or the Grok app) — not Grok inside the X (Twitter) tab. Remind them once if they seem to be working from X.
-- Clip length guide: 10s = best default (two extensions ≈ 30s scene). 15s = longer takes, fewer chains (full chain 45s). 6s = snappier cuts, more chains (full chain 18s). Current selection: ${base}s base → plan in ${blocks}s blocks.
-- Continuity between clip chains: USER screenshots the last frame of the finished chain and uses that image as the next clip’s start. That is how characters/scene stay consistent. Do not replace that with a fresh text-prompted start image when they want flow.
+- Clip length guide: 10s = solid default (two extensions ≈ 30s scene). 15s = longer takes, fewer generations (full chain 45s). 6s = snappy montage / loops (full chain 18s). Current selection: ${base}s base → plan in ${blocks}s blocks. Prefer the duration options on their Imagine UI if they differ.
+- Song bed = their .mp3/.wav. Optional Imagine **voice ref** is only for character voice consistency if they use speech; do not replace the music track with clip-native audio unless they ask. Prefer muting competing clip music when assembling to the song.
+
+## CONSISTENCY LAYERS (use both when continuity matters)
+1. **Multi-image refs** — re-attach the same character / wardrobe / location refs (Imagine supports multiple image refs when available) on stills and videos so identity holds.
+2. **Image-to-video** from an approved start still when possible (stronger than text-to-video for locked characters).
+3. **Same-scene extend** — motion/content only inside the chain (no last-frame language in extension prompts).
+4. **Last-frame screenshot** — between separate clip chains, USER screenshots the final frame of the finished chain and uses it as the next clip’s starting image. This preserves pose, lighting, and framing. Do **not** invent the next start from text alone when they want flow.
+5. Refs help **who**; last-frame helps **where the shot left off**. Neither replaces the other.
 
 ## CLIP MODEL
-Preferred base length: ${base}s (Grok Imagine supports 6s / 10s / 15s — use this unless intake changes it).
+Preferred base length: ${base}s (planning default; align with Grok Imagine duration slider — commonly 6s / 10s / 15s).
 
 - Each scene is ONE clip chain: ${base}s base video → optional Extension 1 → optional Extension 2.
 - Scene totals: ${base}s (base only) | ${mid}s (base + 1 ext) | ${full}s (base + 2 ext).
@@ -1405,7 +1438,7 @@ Preferred base length: ${base}s (Grok Imagine supports 6s / 10s / 15s — use th
 - Plan in ${blocks}s scene blocks (user may use fewer scenes or loops).
 - Extensions stay inside the SAME scene. Never put last-frame / “continue from ending image” language in extension prompts.
 - New scenes begin only when a clip chain is finished.
-- Between separate clip chains (if continuity is wanted): the USER takes a **screenshot of the last frame** of the completed clip and uses that still as the starting image for the next clip. Mention that handoff only at scene boundaries — never inside extension prompts. Do not invent the next start frame from text alone when continuity matters.
+- Between separate clip chains (if continuity is wanted): **screenshot last frame** → next start image. Mention only at boundaries.
 
 ${workflowRules}
 
@@ -1415,22 +1448,29 @@ ${workflowRules}
 ${intakeCompleteHint}
 
 Already provided (treat as answers; only re-ask if the user wants to revise):
-- Starting images / graphics: ${assetsLine}
+- Starting images / multi-refs: ${assetsLine}
+- Voice ref: ${voiceRefLine}
 - Must-include notes / lyric moments: ${mustIncludeLine}
 - Preferred clip length: ${base}s → scene blocks ${blocks}s
 - Aspect ratio: ${aspectLine}${aspectRatio === 'ask' ? ' — MUST ask before any image' : ' — lock this for all stills/clips'}
+- Project scope / compute: ${budgetLine}
+- Resolution preference: ${resolutionLine}
 - Workflow style: ${workflowLabel}
-- Target runtime: ≈ ${runtime} seconds${runtimeProvided ? '' : ' (default — confirm with user)'}
+- Target runtime: ≈ ${runtime} seconds${runtimeProvided ? '' : ' (default — confirm with user; not BPM-derived)'}
 - Title card preference: ${titleCardLine}
 - Song: ${songName} — ${artist}
+- Audio analysis from the static tool: **none** (no BPM / beat grid)
 
 If anything is still missing, ask (skip answered items):
-1. Starting images or graphics? (character, location, logo, title art, style refs) — attach or describe.
-2. Notes, lyric highlights, or “must include” moments?
-3. Clip length: 6s, 10s (recommended for ~${full}s scenes with two extensions), or 15s?
-4. Confirm target runtime / song length if needed.
-5. Title card: auto black + white text for “${songName}” / “${artist}”, or user-supplied art?
-6. Desired aspect ratio for the whole video (and any provided start images): 16:9 widescreen, 9:16 vertical, 1:1 square, or 3:2?
+1. Multi-image refs to attach in Imagine (character, wardrobe, location — up to what the product allows)? Describe or confirm attachments.
+2. Optional voice ref for character speech, or none?
+3. Notes, lyric highlights, or “must include” moments? (User-supplied times only — no tool BPM.)
+4. Clip length: 6s, 10s (default for ~${full}s scenes with two extensions when base is 10s), or 15s?
+5. Confirm target runtime / rough song length if needed (estimate OK; not automatic from file).
+6. Title card: auto black + white text for “${songName}” / “${artist}”, or user-supplied art?
+7. Aspect ratio: 16:9, 9:16, 1:1, or 3:2?
+8. Scope / compute: light (loops/few clips), medium, or full track coverage?
+9. Resolution preference if their surface offers a choice?
 
 Do NOT generate images or the outline until intake is complete (or the user says proceed with defaults).
 
@@ -1442,6 +1482,7 @@ Before generating the title card, Scene 1 start image, or accepting/using a user
 
 ### 1. OUTLINE ONLY — still no images
 After intake, output a structured plan only. Wait for approval / edits before any generation or prompt pack.
+Acknowledge in the outline that timing is user-sketched (no BPM from the tool). Match scene count and length to their scope/budget.
 
 Inputs to use:
 Song structure / sections:
@@ -1453,19 +1494,26 @@ ${mood}
 Must-include moments (weave into the plan):
 ${mustInclude || '(none specified yet — use intake answers)'}
 
-User’s scene sketch (target runtime ≈ ${runtime}s):
+Multi-refs / assets:
+${assets || '(from intake)'}
+
+Voice ref:
+${voiceRef || '(none / from intake)'}
+
+User’s scene sketch (target runtime ≈ ${runtime}s — not auto-derived from audio):
 ${scenes}
 
 For EACH scene in the outline, include:
-- Scene number + time range on the song (e.g. 0:04–0:34)
+- Scene number + time range on the song (e.g. 0:04–0:34) — approximate is fine unless user gave exacts
 - Total duration and clip math (e.g. “${full}s = ${base}s base + 2 extensions”)
 - Visual action / what happens
 - Camera language (push-in, handheld, locked-off, etc.)
-- Beat map inside the chain:
+- Which multi-refs to re-attach
+- Beat map inside the chain (action beats, not BPM unless user supplied):
   - Base (${base}s): what motion / framing happens
   - Ext 1 (if any): how the same scene continues
   - Ext 2 (if any): how it resolves before the next scene
-- Whether this scene should reuse a last-frame handoff from the previous clip chain
+- Whether this scene should use a last-frame screenshot handoff from the previous clip chain
 
 ${outlineOrderExample}
 
@@ -1477,13 +1525,14 @@ ${generationProcess}
 ${styleLock || 'Maintain visual consistency across all clips. Same characters, lighting, color grade, and overall aesthetic.'}
 
 Also:
+- Re-attach multi-image refs on every generation when available.
 - Same character(s), lighting, color grade, and art style across the whole video.
-- Honor intake reference images / graphics.
 - Camera feels continuous within a scene; at scene boundaries a deliberate framing shift is fine if it still matches the style lock.
 - Prefer continuous style within what they choose to make; clean joins via last-frame screenshots when they want flow; respect a shorter or looped scope.
+- Optional voice ref: only when they opted in; keep song as the music bed.
 
 ## START NOW
-Begin with the INTAKE step only. Do not generate images or the outline until intake is complete (or the user confirms defaults).`;
+Begin with the INTAKE step only. Do not generate images or the outline until intake is complete (or the user confirms defaults). Briefly acknowledge: no BPM/audio analysis from the static tool.`;
 
       document.getElementById('output').textContent = prompt;
       document.getElementById('output-section').style.display = 'block';
@@ -1504,10 +1553,13 @@ Begin with the INTAKE step only. Do not generate images or the outline until int
       document.getElementById('artist').value = '';
       document.getElementById('notes').value = '';
       document.getElementById('assets').value = '';
+      document.getElementById('voiceRef').value = '';
       document.getElementById('mustInclude').value = '';
       document.getElementById('clipLength').value = '10';
       document.getElementById('titleCardMode').value = 'auto';
       document.getElementById('aspectRatio').value = 'ask';
+      document.getElementById('budgetMode').value = 'ask';
+      document.getElementById('resolutionPref').value = 'ask';
       const guided = document.querySelector('input[name="workflowMode"][value="guided"]');
       if (guided) guided.checked = true;
       document.getElementById('mood').value = '';
