@@ -697,9 +697,10 @@
       </summary>
       <div class="details-body">
         <div class="guide-block">
-          <strong class="label">Option A — Guided in Grok (easiest)</strong>
-          Copy a ready-made opener (link + message) into a Grok chat. Grok can follow this tool’s workflow
-          and walk you through generation step by step.
+          <strong class="label">Option A — Guided in Grok</strong>
+          Copy a ready-made opener (link + short instructions) into a Grok chat, then attach your track.
+          Best results: also fill the form and paste the <strong style="color: var(--text);">Generated Master Prompt</strong>
+          so Grok has the full rules, not only a URL.
           <div class="link-row">
             <span class="link-label">Live tool</span>
             <a class="url-link" href="https://medicinalsheep.github.io/grokmusicvideoprompt/" target="_blank" rel="noopener">
@@ -714,19 +715,18 @@
 
         <div class="guide-block">
           <strong class="label">Option B — Build the prompt yourself</strong>
-          Fill out the form below (including optional starting assets if you have them), click
-          <strong style="color: var(--text);">Generate Master Prompt</strong>, copy the result, and paste
-          it into a Grok chat. Grok will confirm intake, then walk one step at a time: outline → title card →
-          Scene&nbsp;1 start image only → base video prompt → extension prompts → next scene.
+          Fill out the form below, click <strong style="color: var(--text);">Generate Master Prompt</strong>,
+          copy it into a Grok chat, and attach your track. Flow: intake → BPM pass → outline → title card →
+          Scene&nbsp;1 image → base clip → extensions → last-frame handoffs → assemble.
         </div>
 
         <div class="guide-block">
           <strong class="label">What you’ll need</strong>
           <ul>
-            <li>Your finished track (<code>.mp3</code> or <code>.wav</code>) — the song the music video is built for</li>
+            <li>Your finished track (<code>.mp3</code> or <code>.wav</code>) — attach it in Grok for BPM/structure</li>
             <li>Song name, artist, and a rough visual mood</li>
-            <li>Optional but helpful: reference stills, character art, logos, lyric notes, or “must include” moments</li>
-            <li>Grok Imagine for stills, clips, extensions, and combining the video sequence</li>
+            <li>Optional: multi-image refs, voice ref, lyric notes, must-include moments</li>
+            <li>Grok (app or grok.com) with Imagine for stills, video, and combining clips</li>
           </ul>
         </div>
 
@@ -752,7 +752,7 @@
             <li><strong style="color: var(--text);">Use Grok tab or Grok app</strong> — when combining / mixing, work in the <strong style="color: var(--text);">Grok</strong> product (grok.com tab or the Grok app), not Grok inside the <strong style="color: var(--text);">X</strong> tab.</li>
             <li><strong style="color: var(--text);">Two consistency layers</strong> — (1) re-attach multi-image character/location refs in Imagine when you can; (2) <strong style="color: var(--text);">screenshot the last frame</strong> of a finished chain for the next start. Refs help identity; last-frame keeps shot flow. Text-only next starts break consistency.</li>
             <li><strong style="color: var(--text);">Voice ref (optional)</strong> — for character speech if Imagine offers it; your song file is still the music bed.</li>
-            <li><strong style="color: var(--text);">BPM in Grok</strong> — attach your track in the Grok chat; Grok should analyze BPM / rough structure and plan scene times from that (this page doesn’t read the file).</li>
+            <li><strong style="color: var(--text);">BPM in Grok</strong> — attach your track in chat; Grok should <em>estimate</em> BPM / structure and plan scene times (this page does not read the file; correct Grok if the estimate is off).</li>
             <li><strong style="color: var(--text);">10s default</strong> — best balance; two extensions ≈ a clean 30s scene. <strong style="color: var(--text);">15s</strong> fewer gens; <strong style="color: var(--text);">6s</strong> montage/loops.</li>
             <li><strong style="color: var(--text);">Try the form</strong> — use <em>Load example</em> for the Report Card sample, then Generate.</li>
           </ul>
@@ -787,15 +787,15 @@
 
     <label for="assets">Starting images / multi-refs</label>
     <textarea id="assets" placeholder="e.g. I’ll attach up to ~7 Imagine refs: face + full body, black jacket, alley location. Logo for end card."></textarea>
-    <p class="hint">Character / wardrobe / location stills to re-attach in Grok Imagine (multi-ref, when available). Describe or list what you’ll attach.</p>
+    <p class="hint">Character / wardrobe / location stills to re-attach in Imagine when multi-ref is available. List what you’ll attach.</p>
 
     <label for="voiceRef">Voice ref (optional)</label>
-    <textarea id="voiceRef" placeholder="e.g. None — instrumental track. Or: attach a short voice sample for the lead if doing lip-sync-ish bits."></textarea>
-    <p class="hint">Optional Imagine voice reference. Song audio is still your .mp3/.wav; voice ref is for character speech consistency if you use it.</p>
+    <textarea id="voiceRef" placeholder="e.g. None — instrumental. Or: short voice sample for the lead if using speech."></textarea>
+    <p class="hint">Optional, if Imagine offers voice ref. Your song file stays the music bed.</p>
 
     <label for="mustInclude">Must-include notes / lyric moments</label>
-    <textarea id="mustInclude" placeholder="e.g. Chorus: neon rain on the character’s face. Bridge: hard cut to empty rooftop. Include the lyric “static forever” as on-screen text once."></textarea>
-    <p class="hint">Attach the track in Grok chat so Grok can estimate BPM and plan scene timing. Optional: note chorus/verse times if you already know them.</p>
+    <textarea id="mustInclude" placeholder="e.g. Chorus: neon rain on the character’s face. Bridge: hard cut to empty rooftop."></textarea>
+    <p class="hint">Optional known section times help. Attach the track in Grok so it can estimate BPM and refine the plan.</p>
 
     <div class="row">
       <div>
@@ -805,7 +805,7 @@
           <option value="15">15 seconds (longer takes — 15 / 30 / 45s)</option>
           <option value="6">6 seconds (snappy — 6 / 12 / 18s)</option>
         </select>
-        <p class="hint" id="clipLengthHint">Planning defaults for Grok Imagine’s duration options (use the slider on your surface). 10s default; 15s fewer gens; 6s montage/loops.</p>
+        <p class="hint" id="clipLengthHint">Planning defaults (match the duration control on your Grok surface if it differs). 10s default; 15s fewer gens; 6s montage/loops.</p>
       </div>
       <div>
         <label for="titleCardMode">Title card</label>
@@ -839,7 +839,7 @@
           <option value="medium">Medium — short cut, selective scenes</option>
           <option value="full">Full — cover the track as planned</option>
         </select>
-        <p class="hint">Video uses more of the weekly compute pool. Match plan length to budget.</p>
+        <p class="hint">Video usually costs more usage than chat. Match plan length to your budget.</p>
       </div>
     </div>
 
@@ -849,7 +849,7 @@
       <option value="720">Prefer 720p if available</option>
       <option value="1080">Prefer 1080p if available</option>
     </select>
-    <p class="hint">Higher res costs more compute; availability varies by plan and surface.</p>
+    <p class="hint">Higher res usually costs more; options vary by plan and surface.</p>
 
     <label style="margin-top: 1.25rem;">Workflow style</label>
     <div class="choice-grid" role="radiogroup" aria-label="Workflow style">
@@ -1116,7 +1116,7 @@ ${formatTime(t2)}–${formatTime(t3)} → Scene 3 (${full}s = ${base}s + 2 ext):
       scenesEl.placeholder = scenesPlaceholder(clipLength);
 
       document.getElementById('clipLengthHint').textContent =
-        `Planning default ${base}s (use the duration slider on your Grok surface). ` +
+        `Planning default ${base}s (match your Grok duration control if different). ` +
         `Scene blocks ${blocks}s = base / +1 ext / +2 ext. 10s = balance; 15s = fewer gens; 6s = montage.`;
 
       document.getElementById('scenesHint').textContent =
@@ -1413,38 +1413,34 @@ Style: Minimal, high-contrast, centered or elegantly placed white sans-serif tex
 The user has (or will have) a finished track (.mp3 / .wav). Help them plan and generate music-video visuals with Grok Imagine — stills, clips, in-scene extensions, and (when they want) combining pieces in Grok.
 
 ## AUDIO / BPM (do this early)
-- The static GrokMusicVideoPrompt **page** cannot read the audio file. **You** (Grok) should analyze the track when the user attaches or provides it in chat.
-- **As soon as the track is available**, estimate **BPM**, approximate duration, and rough structure (intro / verse / chorus / bridge / outro or equivalent energy shifts). State those findings briefly (e.g. “~128 BPM, ~3:10, chorus ~0:48”).
-- **Plan the outline from that analysis** — place scene boundaries and clip-chain lengths so visual changes land on sensible musical moments when possible. Prefer aligning longer chains and hard cuts to section changes or strong downbeats over arbitrary clocks.
-- If the track is **not** attached yet, ask for it (or a link/file) before locking the final outline. You may draft a provisional plan from user-stated runtime/structure, then **revise after BPM analysis**.
-- If analysis is uncertain, say so, give a best-effort BPM range, and let the user correct it. Prefer their corrections over a bad grid.
-- Features (max clip length, 1080p, multi-ref count, voice ref, extend, upscale) can vary by plan and surface (prefer grok.com / Grok app, not X). Use what their surface actually offers; treat 6/10/15s as planning defaults tied to the duration slider.
+- The static GrokMusicVideoPrompt **page** cannot read the audio file. When the user attaches the track in this chat, **estimate** BPM, duration, and rough structure (sections / energy shifts). Report briefly (e.g. “~128 BPM, ~3:10, chorus ~0:48”).
+- Treat BPM as an **estimate** unless the user confirms it. Prefer their corrections over a bad grid.
+- **Plan the outline from that estimate** — place scene boundaries and chain lengths on sensible musical moments when possible (section changes, strong hits).
+- If the track is missing, ask for it before locking the final outline. A provisional plan from user-stated runtime/structure is OK; revise after the track is in.
+- Imagine features (clip lengths, aspect ratios, multi-ref, voice ref, extend, resolution) vary by plan and surface. Prefer grok.com or the Grok app over X. Use what their UI actually offers; 6/10/15s are planning defaults.
 
 ## PRODUCTION NOTES
-- Scope / compute: ${budgetLine}. Video burns shared weekly compute faster than chat — prefer fewer/longer clips when budget is light; do not force a long-form MV.
-- Resolution preference: ${resolutionLine}. Higher res costs more; fall back gracefully if unavailable.
-- Before assembling / mixing, confirm order of operations with the user (clip order, loops, skips).
-- When mixing / combining, they should use the Grok product (grok.com tab or the Grok app) — not Grok inside the X (Twitter) tab. Remind them once if they seem to be working from X.
-- Clip length guide: 10s = solid default (two extensions ≈ 30s scene). 15s = longer takes, fewer generations (full chain 45s). 6s = snappy montage / loops (full chain 18s). Current selection: ${base}s base → plan in ${blocks}s blocks. Prefer the duration options on their Imagine UI if they differ.
-- Song bed = their .mp3/.wav. Optional Imagine **voice ref** is only for character voice consistency if they use speech; do not replace the music track with clip-native audio unless they ask. Prefer muting competing clip music when assembling to the song.
+- Scope: ${budgetLine}. Video usually costs more usage than chat — prefer fewer/longer clips when budget is light; do not force a long-form MV.
+- Resolution: ${resolutionLine}. Fall back if unavailable.
+- Before assembling, confirm order of operations (clip list, order, loops, skips).
+- Prefer Grok app or grok.com for combine/mix — not Grok inside the X tab. Remind once if they seem stuck on X.
+- Clip length: current base **${base}s** → scene blocks **${blocks}s** (base / +1 ext / +2 ext). Match their duration control if it differs.
+- Song bed = their .mp3/.wav. Optional **voice ref** only if they want character speech consistency. Do not replace the music bed with clip-native music unless they ask.
 
-## CONSISTENCY LAYERS (use both when continuity matters)
-1. **Multi-image refs** — re-attach the same character / wardrobe / location refs (Imagine supports multiple image refs when available) on stills and videos so identity holds.
-2. **Image-to-video** from an approved start still when possible (stronger than text-to-video for locked characters).
-3. **Same-scene extend** — motion/content only inside the chain (no last-frame language in extension prompts).
-4. **Last-frame screenshot** — between separate clip chains, USER screenshots the final frame of the finished chain and uses it as the next clip’s starting image. This preserves pose, lighting, and framing. Do **not** invent the next start from text alone when they want flow.
-5. Refs help **who**; last-frame helps **where the shot left off**. Neither replaces the other.
+## CONSISTENCY LAYERS (when continuity matters)
+1. **Multi-image refs** — re-attach the same character / wardrobe / location refs on gens when the product allows.
+2. **Image-to-video** from an approved start still when possible (usually better for locked characters than pure text-to-video).
+3. **Same-scene extend** — motion/content only (no last-frame / new-scene language in extension prompts).
+4. **Last-frame screenshot** — between chains, user screenshots the final frame and uses it as the next start. Do not invent the next start from text alone when they want flow.
+5. Refs help **who**; last-frame helps **where the shot left off**.
 
 ## CLIP MODEL
-Preferred base length: ${base}s (planning default; align with Grok Imagine duration slider — commonly 6s / 10s / 15s).
+Preferred base length: ${base}s (planning default; align with their Imagine duration control).
 
-- Each scene is ONE clip chain: ${base}s base video → optional Extension 1 → optional Extension 2.
-- Scene totals: ${base}s (base only) | ${mid}s (base + 1 ext) | ${full}s (base + 2 ext).
-- Example: a ${full}s scene = ${base}s base + TWO extension prompts (${base} + ${base} + ${base}).
-- Plan in ${blocks}s scene blocks (user may use fewer scenes or loops).
-- Extensions stay inside the SAME scene. Never put last-frame / “continue from ending image” language in extension prompts.
-- New scenes begin only when a clip chain is finished.
-- Between separate clip chains (if continuity is wanted): **screenshot last frame** → next start image. Mention only at boundaries.
+- Each scene is ONE clip chain: ${base}s base → optional Ext 1 → optional Ext 2.
+- Totals: ${base}s | ${mid}s (+1) | ${full}s (+2).
+- Plan in ${blocks}s blocks (or fewer scenes / loops if budget is light).
+- Extensions stay in the SAME scene. Last-frame handoff language only at chain boundaries.
 
 ${workflowRules}
 
@@ -1465,34 +1461,34 @@ Already provided (treat as answers; only re-ask if the user wants to revise):
 - Target runtime: ≈ ${runtime} seconds${runtimeProvided ? '' : ' (default — confirm; refine after track BPM analysis)'}
 - Title card preference: ${titleCardLine}
 - Song: ${songName} — ${artist}
-- BPM / structure from the static page: **none** — analyze when the user attaches the track in this chat
+- BPM / structure from the static page: **none** — estimate when the user attaches the track in this chat
 
 If anything is still missing, ask (skip answered items):
-1. Please attach the finished track (.mp3 / .wav) so you can analyze BPM and rough structure (or confirm if already attached).
-2. Multi-image refs to attach in Imagine (character, wardrobe, location — up to what the product allows)? Describe or confirm attachments.
-3. Optional voice ref for character speech, or none?
-4. Notes, lyric highlights, or “must include” moments (with times if known)?
-5. Clip length: 6s, 10s (default for ~${full}s scenes with two extensions when base is 10s), or 15s?
-6. Confirm target runtime / song length if needed (prefer measured length from the file once attached).
-7. Title card: auto black + white text for “${songName}” / “${artist}”, or user-supplied art?
+1. Attach the finished track (.mp3 / .wav) for BPM/structure estimate (or confirm already attached).
+2. Multi-image refs to re-attach in Imagine (character, wardrobe, location)?
+3. Optional voice ref for speech, or none?
+4. Must-include notes / lyric moments (with times if known)?
+5. Clip length: 6s, 10s (default), or 15s?
+6. Target runtime / song length (prefer measured length from the file once attached).
+7. Title card: auto black + white text for “${songName}” / “${artist}”, or user art?
 8. Aspect ratio: 16:9, 9:16, 1:1, 3:2, 4:3, or 21:9?
-9. Scope / compute: light (loops/few clips), medium, or full track coverage?
+9. Scope: light / medium / full?
 10. Resolution preference if their surface offers a choice?
 
-Do NOT generate images until intake is complete (or the user says proceed with defaults). Prefer having the track + BPM read before locking the outline; a provisional outline is OK if they want to plan first.
+Do NOT generate images until intake is complete (or the user says proceed with defaults). Prefer track + BPM estimate before locking the outline; provisional outline is OK if they want to plan first.
 
 ### BPM PASS (when track is available — before locking outline)
-1. Analyze / estimate BPM, duration, and section map.
-2. Report findings to the user in a short block.
-3. Adjust scene time ranges and clip-chain lengths to fit the music (and their scope/budget).
+1. Estimate BPM, duration, and section map (label as estimate).
+2. Report findings briefly; accept user corrections.
+3. Adjust scene ranges and chain lengths to the music and their scope/budget.
 4. Wait for approval of the music-aware outline before title card / first image.
 
 ### ASPECT RATIO GATE (before any image)
-Before generating the title card, Scene 1 start image, or accepting/using a user-provided start image, confirm aspect ratio is locked:
-- Choices: **16:9** (widescreen), **9:16** (vertical), **1:1** (square), **3:2** (classic photo), **4:3** (classic TV / photo), **21:9** (ultrawide cinema).
-- If still unknown, ask now and wait — do not generate or import the first image until they choose.
-- Once chosen, use that ratio for every still and video clip unless the user explicitly changes it.
-- Prefer ratios their Grok Imagine surface actually offers; if 4:3 or 21:9 is unavailable, say so and offer the closest supported option.
+Confirm aspect ratio is locked before title card, Scene 1 start image, or using a provided start image:
+- Options: **16:9**, **9:16**, **1:1**, **3:2**, **4:3**, **21:9**.
+- If unknown, ask and wait.
+- Keep the same ratio for all stills/clips unless they change it.
+- If their surface lacks a chosen ratio, say so and offer the closest supported option.
 
 ### 1. OUTLINE ONLY — still no images
 After intake, output a structured plan only. Wait for approval / edits before any generation or prompt pack.
@@ -1540,14 +1536,13 @@ ${generationProcess}
 ${styleLock || 'Maintain visual consistency across all clips. Same characters, lighting, color grade, and overall aesthetic.'}
 
 Also:
-- Re-attach multi-image refs on every generation when available.
-- Same character(s), lighting, color grade, and art style across the whole video.
-- Camera feels continuous within a scene; at scene boundaries a deliberate framing shift is fine if it still matches the style lock.
-- Prefer continuous style within what they choose to make; clean joins via last-frame screenshots when they want flow; respect a shorter or looped scope.
-- Optional voice ref: only when they opted in; keep song as the music bed.
+- Re-attach multi-image refs when available.
+- Keep characters, lighting, color grade, and art style consistent within what the model allows (expect some drift; last-frame + refs reduce it).
+- Last-frame screenshots for chain joins when they want flow; respect short/looped scope.
+- Voice ref only if they opted in; song stays the music bed.
 
 ## START NOW
-Begin with the INTAKE step only. Ask for the track early if missing. Run BPM pass when the track arrives, then lock a music-aware outline before images (unless the user explicitly wants a provisional plan first).`;
+Begin with INTAKE only. Ask for the track early if missing. When the track arrives, run BPM pass (estimate), then lock a music-aware outline before images (unless they want a provisional plan first).`;
 
       document.getElementById('output').textContent = prompt;
       document.getElementById('output-section').style.display = 'block';
