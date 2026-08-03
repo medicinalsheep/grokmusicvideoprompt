@@ -826,6 +826,8 @@
           <option value="9:16">9:16 — vertical</option>
           <option value="1:1">1:1 — square</option>
           <option value="3:2">3:2 — classic photo</option>
+          <option value="4:3">4:3 — classic TV / photo</option>
+          <option value="21:9">21:9 — ultrawide cinema</option>
         </select>
         <p class="hint">Lock before title card / Scene 1 (and when using a provided start image).</p>
       </div>
@@ -1069,6 +1071,8 @@
       if (value === '9:16') return '9:16 vertical';
       if (value === '1:1') return '1:1 square';
       if (value === '3:2') return '3:2 classic photo';
+      if (value === '4:3') return '4:3 classic TV / photo';
+      if (value === '21:9') return '21:9 ultrawide cinema';
       return 'Ask before the first image';
     }
 
