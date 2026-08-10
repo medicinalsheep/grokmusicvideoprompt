@@ -918,7 +918,7 @@
     <button type="button" class="secondary" onclick="clearForm()">Clear</button>
   </div>
   <p class="hint" style="margin-top: 0.65rem;">
-    Load example fills a Report Card–style sample (~1:32, 10s guided) and shows a link to the finished video on X (earlier process — style reference only). Copy link for Grok pastes a ready opener with the live URL.
+    Load example fills a Report Card–style sample (~1:32, 10s guided). The linked X video is from an earlier model era — style reference only; use Image 2.0 + Video 1.5 process from the master prompt.
   </p>
   <div class="guide-status" id="form-status" style="margin-bottom: 1rem;"></div>
 
@@ -932,9 +932,9 @@
       </a>
     </div>
     <p>
-      Note: that video was made with an <strong style="color: var(--text);">earlier version</strong> of the process,
-      before this tool’s current intake → outline → step-by-step workflow. Use it as a style/result reference,
-      not as a 1:1 guide to the prompts this page generates now.
+      Note: that video was made with an <strong style="color: var(--text);">earlier model / process</strong>
+      (before Image&nbsp;2.0 + Video&nbsp;1.5 world-lock workflow). Use it as a style/result reference only —
+      expect stronger multi-ref consistency and extend tools with the current master prompt.
     </p>
   </div>
 
@@ -1040,15 +1040,16 @@
       document.getElementById('artist').value = 'medicinalsheep';
       document.getElementById('notes').value = '2026 • Grok Imagine music video sample (~1:32)';
       document.getElementById('assets').value =
-        'Multi-refs if attaching in Imagine: classroom wide, report card close-up, boy face + white ChatGPT tee, teacher arm/sleeve. Starting still: empty elementary classroom, wooden teacher desk, brass desk lamp, “5th Grade Report Card” for student “wokeGPT” (all D’s, parent note visible). Continuity: screenshot last frame of each finished chain for the next start.';
-      document.getElementById('voiceRef').value = 'None — focus on picture; song is the bed.';
+        'Image 2.0 world lock (up to ~7 refs): boy face + full body white ChatGPT tee, teacher arm/sleeve, classroom wide, desk + brass lamp, report-card prop close-up, end logo. Starting still: empty classroom, report card on desk under lamp, “5th Grade Report Card” for student “wokeGPT”. Continuity: Extend-from-frame or last-frame screenshot between chains.';
+      document.getElementById('voiceRef').value = 'None — picture-led; song is the bed.';
       document.getElementById('mustInclude').value =
-        'Readable report card gags (all D grades + “too woke / difficulty telling the truth” parent note). Hand-off of the paper from teacher to student. Keep the same classroom and the same kid. End on a clean hold / title card.';
+        'Readable report card gags (all D grades + “too woke / difficulty telling the truth” parent note). Hand-off of the paper from teacher to student. Same classroom and kid. End on clean title/end card (Image 2.0 crisp text).';
       document.getElementById('clipLength').value = '10';
       document.getElementById('titleCardMode').value = 'auto';
       document.getElementById('aspectRatio').value = '16:9';
       document.getElementById('budgetMode').value = 'medium';
-      document.getElementById('resolutionPref').value = 'ask';
+      document.getElementById('resolutionPref').value = '1080';
+      document.getElementById('audioBedMode').value = 'song';
       const guided = document.querySelector('input[name="workflowMode"][value="guided"]');
       if (guided) guided.checked = true;
       document.getElementById('mood').value =
@@ -1105,9 +1106,16 @@
     }
 
     function resolutionPrefLabel(value) {
-      if (value === '720') return 'Prefer 720p if available';
-      if (value === '1080') return 'Prefer 1080p if available';
+      if (value === '720') return 'Prefer 720p (lower usage)';
+      if (value === '1080') return 'Prefer native 1080p (Video 1.5; higher quality + cost)';
       return 'Ask / use whatever the Grok surface offers';
+    }
+
+    function audioBedModeLabel(value) {
+      if (value === 'song') return 'Keep user song as the only music bed';
+      if (value === 'song_sfx') return 'Song bed + allow Imagine SFX / ambience';
+      if (value === 'imagine') return 'Allow Imagine complementary music/SFX (user may mix later)';
+      return 'Ask in chat';
     }
 
     function getWorkflowMode() {
@@ -1220,21 +1228,21 @@ Still always:
 3. After outline approval, deliver ONE complete prompt pack for the whole video (not drip-fed step-by-step).
 
 The pack must include, in order, with clear labels:
-- Title card instructions (or image prompt)
+- Image 2.0 world-lock still prompts (character / location / props; multi-ref up to ~7)
+- Title card (Image 2.0 for crisp text when auto)
 - For EACH scene:
-  - Start image: Scene 1 from concept/refs; later scenes prefer last-frame screenshot from the previous chain (not a text-only new keyframe when continuity is wanted)
-  - Base video prompt (${base}s) in a fenced paste-ready block
-  - Extension prompts if planned (1 for ${mid}s scenes, 2 for ${full}s scenes) — each in its own fenced block
-  - Boundary note: screenshot last frame of finished chain → use that still as next clip start image (if continuity wanted)
-- Style lock reminder at the end
-- Before assembly: confirm order of operations with the user (what to combine / loop / skip)
+  - Start image: Scene 1 from world lock; later scenes prefer last-frame / Extend-from-frame (not text-only when continuity wanted)
+  - Base video prompt (${base}s) — prefer image-to-video + multi-refs
+  - Extension prompts if planned (1 for ${mid}s, 2 for ${full}s) — same-scene motion only; use Extend UI when available
+  - Boundary note: Extend-from-frame or last-frame screenshot → next start
+- Audio preference + assembly order
+- Style lock reminder
 
 Rules inside the pack:
-- Extension prompts = same-scene motion/content only. NEVER last-frame / new-scene language in extensions.
-- Last-frame handoff language only in boundary notes between scenes.
-- For continuity across chains: USER screenshots the last frame of the completed clip chain and uses that image as the next start — do NOT invent the next start image from text alone when they want flow.
-- User may still ask to generate assets one at a time from the pack; the pack itself is the full reference.
-- Scope is flexible: full cut, fewer scenes, or looped clips — respect token budget and user preference.
+- Extension prompts = same-scene motion only. NEVER last-frame / new-scene language inside extension prompts.
+- Text-to-video allowed for B-roll only; image-first path preferred for locked characters.
+- Continuity: Extend-from-frame and/or last-frame screenshot — not text-only next starts.
+- Scope flexible: full cut, fewer scenes, or loops.
 
 Do NOT generate every image/video automatically unless the user asks — deliver the copy-ready pack after outline approval, then generate only what they request.`;
       }
@@ -1269,82 +1277,89 @@ After delivering the pack, ask which asset to generate first (title card image, 
 
 ### 3. GENERATE FROM THE PACK (on request)
 When the user picks an item, generate that still or clip only, then wait for the next request.
-At each scene boundary (when finishing a chain), remind them: screenshot the last frame of that completed clip and use it as the starting image for the next clip if they want continuity. Do not prompt-generate a fresh start still for continuity.
-Before final assembly, confirm order of operations (which clips, order, loops, what to skip).
+At each chain boundary, remind: use Extend-from-frame if available, or screenshot the last frame as the next start image. Do not text-only invent the next start for continuity.
+Before final assembly, confirm order of operations and audio-bed preference.
 
 Extension rules (always):
 - Same scene, continuous motion only.
-- NEVER “use last frame as starting image” or cross-scene language inside extension prompts.
-- Last-frame screenshot handoff only in boundary notes between chains.`;
+- NEVER put last-frame / new-scene language inside extension prompts.
+- Prefer Video 1.5 Extend UI; boundary handoff notes only between chains.`;
       }
 
-      return `### 2. TITLE CARD — after outline approval
+      return `### 2. WORLD LOCK — Image 2.0 (after outline approval, before heavy video)
+Build a small consistent “world” with Image 2.0 multi-ref stills (often up to ~7 refs when the product allows):
+- Character sheet(s) and/or hero wardrobe
+- Key location(s)
+- Important props
+- Re-use these refs on later stills and Video 1.5 gens
+Wait for approval of the world pack before title card (unless the user already supplied locked refs).
+
+### 3. TITLE CARD — Image 2.0 still
 ${titleCardInstructions}
 
-Generate (or accept) the title card still only. Wait for approval. Then move to Scene 1 start image — nothing else.
+Prefer Image 2.0 for crisp readable type / precision edits if refining. Wait for approval. Then Scene 1 start image only.
 
-### 3. SCENE 1 START IMAGE ONLY
-Generate ONE keyframe still for Scene 1 (the first visual after the title card).
-- Match mood, style lock, aspect ratio, and multi-image refs from intake (re-attach refs in Imagine when available).
-- This image is the starting frame for Scene 1’s base video (prefer image-to-video next).
-- Do NOT generate Scene 2+ keyframes yet.
-- Show the image (or a precise image prompt if the user generates it themselves) and wait for approval / notes.
+### 4. SCENE 1 START IMAGE ONLY
+Generate ONE keyframe still for Scene 1 (after the title card).
+- Match mood, style lock, aspect ratio, and world-lock multi-refs (re-attach refs).
+- This is the first frame for Scene 1 image-to-video.
+- Do NOT pre-generate Scene 2+ keyframes.
+- Wait for approval / notes.
 
-### 4. SCENE 1 BASE VIDEO PROMPT (${base}s)
-Only after the Scene 1 start image is approved, provide ONE copy-ready base video prompt for a ${base}s Grok Imagine clip driven from that image.
+### 5. SCENE 1 BASE VIDEO — Video 1.5 (${base}s)
+Only after the Scene 1 still is approved, provide ONE copy-ready base video prompt for a ${base}s clip **image-to-video** from that still (prefer over pure text-to-video for locked characters). Text-to-video is OK for B-roll only.
 
-Format exactly:
+Format:
 
 **Scene 1 — Base video (${base}s)**
 \`\`\`
-[paste-ready prompt: subject, action, camera move, lighting, style; assume the approved start image is the first frame]
+[paste-ready prompt: subject, action, camera move, lighting, style; approved start image = first frame; re-attach multi-refs]
 \`\`\`
-- Duration: ${base}s
-- Driven from: approved Scene 1 start image
-- Then wait. Do not output extension prompts until the user accepts this base (or asks for the next step).
+- Duration: ${base}s (match duration control)
+- Resolution: honor user preference when available (native 1080p costs more)
+- Re-attach world-lock refs + optional voice ref
+- Wait before extensions.
 
-If you can generate video directly, generate the ${base}s clip from the approved image using that prompt, then wait.
+If you can generate video directly, generate from the approved image, then wait.
 
-### 5. IN-SCENE EXTENSION PROMPTS (same scene only)
-If the outline planned extensions for this scene, deliver them ONE AT A TIME after the previous clip step is accepted.
+### 6. IN-SCENE EXTEND (same scene only)
+If the outline planned extensions, deliver ONE AT A TIME after the previous step is accepted.
 
-For a full ${full}s scene with ${base}s base: deliver **two** extension prompts (Ext 1, then Ext 2).
-For a ${mid}s scene: deliver **one** extension prompt.
-For a ${base}s scene: skip this section.
+For a full ${full}s scene with ${base}s base: **two** extension prompts (Ext 1, then Ext 2).
+For ${mid}s: **one** extension. For ${base}s only: skip.
 
-Format each as:
+Format:
 
 **Scene N — Extension K of M (+${base}s → total Xs)**
 \`\`\`
-[paste-ready prompt: ONLY continued action / camera motion inside this same scene]
+[paste-ready: ONLY continued action / camera motion inside this same scene]
 \`\`\`
 
 Extension rules:
-- Same scene, continuous motion/content only.
-- NEVER include “use last frame as starting image”, “new scene”, or cross-scene handoff language.
-- Grok’s built-in extend continues the clip — prompts describe what happens next in the motion, not how to re-seed the image.
-- After each extension prompt (or generated extend), wait for approval before the next extension.
+- Prefer Video 1.5 **Extend** / **Extend from frame** UI when available.
+- Same scene, continuous motion only.
+- NEVER include “use last frame as starting image”, “new scene”, or cross-scene handoff language in extension prompts.
+- After each extend, wait for approval.
 
-### 6. SCENE BOUNDARY HANDOFF (continuity critical)
-When this scene’s planned length is reached (after base, or after its last extension — e.g. a full ${full}s chain):
+### 7. SCENE BOUNDARY HANDOFF (continuity critical)
+When the scene’s planned length is reached (after base or last extension — e.g. a full ${full}s chain):
 - STOP extending this chain.
-- Tell the user clearly:
-  1. **Screenshot the last frame** of this finished clip (the final frame of the completed chain).
-  2. Use that screenshot as the **starting image** for the NEXT clip if they want characters and scene to flow together.
-  3. Do **not** rely on a new text-only image prompt for the next start when continuity matters — that breaks character/scene consistency. Last-frame screenshot is the method.
-- Do not start the next scene until they confirm they have the screenshot (or they choose a hard cut / no continuity).
+- Tell the user:
+  1. Prefer **Extend from frame** into the next beat if the UI supports chaining that way for a *new* scene start, **or**
+  2. **Screenshot the last frame** of the finished clip and use it as the **starting image** for the next clip (reliable method).
+  3. Do **not** invent the next start from text alone when continuity matters.
+- Wait until they confirm the handoff (or choose a hard cut).
 
-### 7. NEXT SCENES (repeat 3–6)
-For each remaining scene, in order:
-1. Start image: prefer the **last-frame screenshot** from the previous chain when continuity is wanted → wait
-2. One copy-ready base video prompt (${base}s) → wait
-3. Extension prompts one at a time if planned (up to 2 for a ${full}s scene) → wait after each
-4. Boundary handoff → next scene
+### 8. NEXT SCENES (repeat 4–7)
+1. Start image from last-frame / Extend-from-frame when continuity wanted → wait  
+2. Base image-to-video (${base}s) with multi-refs → wait  
+3. Extensions one at a time if planned → wait  
+4. Boundary handoff → next scene  
 
-### 8. BEFORE ASSEMBLY
-Before combining / mixing the final video (or a short loop set), confirm order of operations with the user: clip list and order, what to loop or omit, aspect ratio already locked, working in Grok tab/app not X. Then assemble only what they approved.
+### 9. BEFORE ASSEMBLY
+Confirm: clip order, loops/skips, aspect ratio, resolution, **audio bed preference**, Grok app/grok.com (not X). Then assemble only what they approved.
 
-Never jump ahead. Never batch future scenes unless the user asks to switch to a full prompt pack.`;
+Never jump ahead. Never batch future scenes unless they ask for a full prompt pack.`;
     }
 
     function generatePrompt() {
@@ -1359,6 +1374,7 @@ Never jump ahead. Never batch future scenes unless the user asks to switch to a 
       const aspectRatio = document.getElementById('aspectRatio').value || 'ask';
       const budgetMode = document.getElementById('budgetMode').value || 'ask';
       const resolutionPref = document.getElementById('resolutionPref').value || 'ask';
+      const audioBedMode = document.getElementById('audioBedMode').value || 'song';
       const workflowMode = getWorkflowMode();
       const mood = document.getElementById('mood').value.trim() || '[Describe overall aesthetic]';
       const styleLock = document.getElementById('styleLock').value.trim();
@@ -1376,6 +1392,7 @@ Never jump ahead. Never batch future scenes unless the user asks to switch to a 
       const aspectLine = aspectRatioLabel(aspectRatio);
       const budgetLine = budgetModeLabel(budgetMode);
       const resolutionLine = resolutionPrefLabel(resolutionPref);
+      const audioBedLine = audioBedModeLabel(audioBedMode);
       const runtimeProvided = Boolean(document.getElementById('runtime').value.trim());
       const workflowLabel =
         workflowMode === 'pack' ? 'Full prompt pack' : 'Guided step-by-step';
@@ -1401,13 +1418,13 @@ ${notesLine}
 Style when auto: Minimal, high-contrast, white sans-serif only. No logo, particles, or effects.
 If they supply art, use that instead. Hold the title for 3–4 seconds in the final edit.`;
       } else {
-        titleCardInstructions = `Generate a single still image that is pure black background with clean white text only.
+        titleCardInstructions = `Generate a single still with Image 2.0: pure black background, clean white text only (use Image 2.0’s stronger text rendering / precision edit if type is soft).
 Text content:
 - Song Name: ${songName}
 - Artist / Author: ${artist}
 ${notesLine}
 
-Style: Minimal, high-contrast, centered or elegantly placed white sans-serif text. No other elements, no logo, no particles, no effects. Hold this card for 3–4 seconds in the final edit.`;
+Style: Minimal, high-contrast, centered or elegantly placed white sans-serif. No extra elements, logo, particles, or effects. Hold 3–4 seconds in the final edit.`;
       }
 
       const workflowRules = buildWorkflowRules(workflowMode, base, mid, full);
@@ -1426,42 +1443,42 @@ Style: Minimal, high-contrast, centered or elegantly placed white sans-serif tex
 
       const outlineOrderExample =
         workflowMode === 'pack'
-          ? 'Also list what the prompt pack will contain, e.g.: title card → each scene’s start image prompt + base + extensions + boundary notes.'
-          : 'Also list a short generation order at the end of the outline, e.g.:\n1) Title card → 2) Scene 1 start image only → 3) Scene 1 base video prompt → 4) Scene 1 ext prompts → 5) boundary handoff → 6) Scene 2 start image → …';
+          ? 'Also list pack contents: world-lock stills → title card → each scene start + base + extends + boundary notes + audio preference.'
+          : 'Also list generation order, e.g.:\n1) World lock (Image 2.0) → 2) Title card → 3) Scene 1 still → 4) Scene 1 image-to-video → 5) Extends → 6) Boundary handoff → 7) Scene 2…';
 
-      const prompt = `You are helping produce a clean, consistent music video using Grok Imagine (image) + Grok video generation.
+      const prompt = `You are helping produce a clean, consistent music video using **Grok Imagine Image 2.0** (stills / multi-ref / precision edits) and **Video 1.5** (clips up to ~15s, multi-ref, voice ref, native 1080p when available, improved Extend).
 
-The user has (or will have) a finished track (.mp3 / .wav). Help them plan and generate music-video visuals with Grok Imagine — stills, clips, in-scene extensions, and (when they want) combining pieces in Grok.
+The user has (or will have) a finished track (.mp3 / .wav). Plan and generate stills + video, then assemble in the full Grok product when they are ready.
+
+## IMAGINE STACK (current)
+- **Image 2.0:** multi-ref stills, precision editing, stronger text for title cards, lock character / location / prop “world” before heavy video spend.
+- **Video 1.5:** image-to-video and text-to-video; multi-image refs (often up to ~7); optional voice ref; duration options commonly 6/10/15s; native 1080p when available (higher quality + usage); improved **Extend** / **Extend from frame**.
+- **Preferred path for music videos:** Image 2.0 world lock → image-to-video from approved stills → same-scene Extend. **Text-to-video is available** but prefer it for B-roll / non-character shots — weaker for locked faces and wardrobe.
+- Features vary by plan and surface. Prefer **grok.com or Grok app**, not Grok-in-X. Use what their UI actually offers.
 
 ## AUDIO / BPM (do this early)
-- The static GrokMusicVideoPrompt **page** cannot read the audio file. When the user attaches the track in this chat, **estimate** BPM, duration, and rough structure (sections / energy shifts). Report briefly (e.g. “~128 BPM, ~3:10, chorus ~0:48”).
-- Treat BPM as an **estimate** unless the user confirms it. Prefer their corrections over a bad grid.
-- **Plan the outline from that estimate** — place scene boundaries and chain lengths on sensible musical moments when possible (section changes, strong hits).
-- If the track is missing, ask for it before locking the final outline. A provisional plan from user-stated runtime/structure is OK; revise after the track is in.
-- Imagine features (clip lengths, aspect ratios, multi-ref, voice ref, extend, resolution) vary by plan and surface. Prefer grok.com or the Grok app over X. Use what their UI actually offers; 6/10/15s are planning defaults.
+- The static GrokMusicVideoPrompt **page** cannot read the audio file. When the user attaches the track, **estimate** BPM, duration, and rough structure. Report briefly (e.g. “~128 BPM, ~3:10, chorus ~0:48”).
+- Treat BPM as an **estimate** unless the user confirms it. Prefer their corrections.
+- Plan scene boundaries and chain lengths on sensible musical moments when possible.
+- If the track is missing, ask for it before locking the final outline (provisional plan OK first).
 
 ## PRODUCTION NOTES
-- Scope: ${budgetLine}. Video usually costs more usage than chat — prefer fewer/longer clips when budget is light; do not force a long-form MV.
-- Resolution: ${resolutionLine}. Fall back if unavailable.
-- Before assembling, confirm order of operations (clip list, order, loops, skips).
-- Prefer Grok app or grok.com for combine/mix — not Grok inside the X tab. Remind once if they seem stuck on X.
-- Clip length: current base **${base}s** → scene blocks **${blocks}s** (base / +1 ext / +2 ext). Match their duration control if it differs.
-- Song bed = their .mp3/.wav. Optional **voice ref** only if they want character speech consistency. Do not replace the music bed with clip-native music unless they ask.
+- Scope: ${budgetLine}. Video (especially 1080p and long form) costs more usage than chat; free tiers limited — do not force a long-form MV.
+- Resolution: ${resolutionLine}. Native 1080p = better quality, higher cost; fall back if unavailable.
+- Audio when assembling: ${audioBedLine}. Optional **voice ref** is for character speech consistency only — separate from the song bed.
+- Clip length: base **${base}s** → blocks **${blocks}s**. Match their duration control if different.
+- Before assembling, confirm order of operations (clips, loops, skips, audio preference). Prefer Grok app / grok.com for combine.
 
-## CONSISTENCY LAYERS (when continuity matters)
-1. **Multi-image refs** — re-attach the same character / wardrobe / location refs on gens when the product allows.
-2. **Image-to-video** from an approved start still when possible (usually better for locked characters than pure text-to-video).
-3. **Same-scene extend** — motion/content only (no last-frame / new-scene language in extension prompts).
-4. **Last-frame screenshot** — between chains, user screenshots the final frame and uses it as the next start. Do not invent the next start from text alone when they want flow.
-5. Refs help **who**; last-frame helps **where the shot left off**.
+## CONSISTENCY LAYERS
+1. **Image 2.0 world lock** — multi-ref character / location / prop stills first (up to ~7 refs when available).
+2. **Re-attach the same refs** on later stills and Video 1.5 gens.
+3. **Image-to-video** from approved start stills (default for character scenes).
+4. **Same-scene Extend** — motion only; use Extend UI / Extend-from-frame when available (no last-frame language *inside* extension prompts).
+5. **Between chains:** Extend-from-frame **and/or** last-frame **screenshot** as next start image. Do not invent next starts from text alone when continuity matters.
+6. Refs help **who**; last-frame / Extend-from-frame helps **where the shot left off**.
 
 ## CLIP MODEL
-Preferred base length: ${base}s (planning default; align with their Imagine duration control).
-
-- Each scene is ONE clip chain: ${base}s base → optional Ext 1 → optional Ext 2.
-- Totals: ${base}s | ${mid}s (+1) | ${full}s (+2).
-- Plan in ${blocks}s blocks (or fewer scenes / loops if budget is light).
-- Extensions stay in the SAME scene. Last-frame handoff language only at chain boundaries.
+Preferred base: ${base}s → optional Ext 1 → optional Ext 2 (totals ${base}s | ${mid}s | ${full}s). Plan in ${blocks}s blocks or fewer if budget is light. Extensions stay in the SAME scene.
 
 ${workflowRules}
 
@@ -1471,61 +1488,60 @@ ${workflowRules}
 ${intakeCompleteHint}
 
 Already provided (treat as answers; only re-ask if the user wants to revise):
-- Starting images / multi-refs: ${assetsLine}
+- World lock / multi-refs (up to ~7): ${assetsLine}
 - Voice ref: ${voiceRefLine}
 - Must-include notes / lyric moments: ${mustIncludeLine}
 - Preferred clip length: ${base}s → scene blocks ${blocks}s
-- Aspect ratio: ${aspectLine}${aspectRatio === 'ask' ? ' — MUST ask before any image' : ' — lock this for all stills/clips'}
+- Aspect ratio: ${aspectLine}${aspectRatio === 'ask' ? ' — MUST ask before any image' : ' — lock for all stills/clips'}
 - Project scope / compute: ${budgetLine}
 - Resolution preference: ${resolutionLine}
+- Audio when assembling: ${audioBedLine}
 - Workflow style: ${workflowLabel}
-- Target runtime: ≈ ${runtime} seconds${runtimeProvided ? '' : ' (default — confirm; refine after track BPM analysis)'}
+- Target runtime: ≈ ${runtime} seconds${runtimeProvided ? '' : ' (default — confirm; refine after track BPM)'}
 - Title card preference: ${titleCardLine}
 - Song: ${songName} — ${artist}
-- BPM / structure from the static page: **none** — estimate when the user attaches the track in this chat
+- BPM from the static page: **none** — estimate when the track is attached in this chat
 
 If anything is still missing, ask (skip answered items):
-1. Attach the finished track (.mp3 / .wav) for BPM/structure estimate (or confirm already attached).
-2. Multi-image refs to re-attach in Imagine (character, wardrobe, location)?
+1. Attach finished track (.mp3 / .wav) for BPM/structure estimate (or confirm attached).
+2. Multi-image refs for Image 2.0 world lock (character, location, props — up to ~7)?
 3. Optional voice ref for speech, or none?
 4. Must-include notes / lyric moments (with times if known)?
 5. Clip length: 6s, 10s (default), or 15s?
-6. Target runtime / song length (prefer measured length from the file once attached).
-7. Title card: auto black + white text for “${songName}” / “${artist}”, or user art?
+6. Target runtime / song length (prefer measured from file).
+7. Title card: auto black + white (Image 2.0 crisp text), or user art?
 8. Aspect ratio: 16:9, 9:16, 1:1, 3:2, 4:3, or 21:9?
 9. Scope: light / medium / full?
-10. Resolution preference if their surface offers a choice?
+10. Resolution: 720 / 1080 / surface default?
+11. Audio: keep song only, song + SFX, or allow Imagine complementary audio?
 
-Do NOT generate images until intake is complete (or the user says proceed with defaults). Prefer track + BPM estimate before locking the outline; provisional outline is OK if they want to plan first.
+Do NOT generate images until intake is complete (or user says proceed with defaults). Prefer track + BPM estimate before locking the outline.
 
-### BPM PASS (when track is available — before locking outline)
-1. Estimate BPM, duration, and section map (label as estimate).
-2. Report findings briefly; accept user corrections.
-3. Adjust scene ranges and chain lengths to the music and their scope/budget.
-4. Wait for approval of the music-aware outline before title card / first image.
+### BPM PASS (when track is available)
+1. Estimate BPM, duration, section map (label as estimate).
+2. Report briefly; accept corrections.
+3. Adjust scene ranges and chain lengths to the music and scope.
+4. Wait for approval of the music-aware outline before world lock / title card / first image.
 
 ### ASPECT RATIO GATE (before any image)
-Confirm aspect ratio is locked before title card, Scene 1 start image, or using a provided start image:
-- Options: **16:9**, **9:16**, **1:1**, **3:2**, **4:3**, **21:9**.
-- If unknown, ask and wait.
-- Keep the same ratio for all stills/clips unless they change it.
-- If their surface lacks a chosen ratio, say so and offer the closest supported option.
+Lock aspect before title card, world-lock finals, Scene 1 start, or using a provided start image:
+**16:9**, **9:16**, **1:1**, **3:2**, **4:3**, **21:9**. If unsupported on their surface, offer the closest option.
 
-### 1. OUTLINE ONLY — still no images
-After intake, output a structured plan only. Wait for approval / edits before any generation or prompt pack.
-If BPM pass is done, ground the outline in that analysis (cite BPM + key section times). If not, mark times as provisional and note “pending track attach / BPM pass.” Match scene count and length to their scope/budget.
+### 1. OUTLINE ONLY — still no video (world-lock stills may follow after approval)
+After intake, output a structured plan only. Wait for approval before generation.
+If BPM pass is done, ground times in that estimate. If not, mark provisional. Match scope/budget.
 
-Inputs to use:
+Inputs:
 Song structure / sections:
 ${structure}
 
 Visual concept / mood:
 ${mood}
 
-Must-include moments (weave into the plan):
+Must-include moments:
 ${mustInclude || '(none specified yet — use intake answers)'}
 
-Multi-refs / assets:
+World lock / multi-refs:
 ${assets || '(from intake)'}
 
 Voice ref:
@@ -1534,18 +1550,14 @@ ${voiceRef || '(none / from intake)'}
 User’s scene sketch (target runtime ≈ ${runtime}s — refine with file length + BPM when available):
 ${scenes}
 
-For EACH scene in the outline, include:
-- Scene number + time range on the song (e.g. 0:04–0:34), aligned to sections/BPM when known
-- Total duration and clip math (e.g. “${full}s = ${base}s base + 2 extensions”)
-- Musical cue (e.g. “starts on chorus downbeat ~0:48”) when BPM pass exists
-- Visual action / what happens
-- Camera language (push-in, handheld, locked-off, etc.)
+For EACH scene include:
+- Scene number + time range (aligned to sections/BPM when known)
+- Clip math (e.g. “${full}s = ${base}s base + 2 extensions”)
+- Musical cue when BPM pass exists
+- Visual action + camera language
 - Which multi-refs to re-attach
-- Action map inside the chain (prefer hits on beats/bars when BPM is known):
-  - Base (${base}s): what motion / framing happens
-  - Ext 1 (if any): how the same scene continues
-  - Ext 2 (if any): how it resolves before the next scene
-- Whether this scene should use a last-frame screenshot handoff from the previous clip chain
+- Action map for base / ext1 / ext2
+- Whether next chain uses last-frame / Extend-from-frame handoff
 
 ${outlineOrderExample}
 
@@ -1557,13 +1569,14 @@ ${generationProcess}
 ${styleLock || 'Maintain visual consistency across all clips. Same characters, lighting, color grade, and overall aesthetic.'}
 
 Also:
-- Re-attach multi-image refs when available.
-- Keep characters, lighting, color grade, and art style consistent within what the model allows (expect some drift; last-frame + refs reduce it).
-- Last-frame screenshots for chain joins when they want flow; respect short/looped scope.
-- Voice ref only if they opted in; song stays the music bed.
+- Re-attach multi-image refs (Image 2.0 + Video 1.5) when available.
+- Expect some model drift; world lock + last-frame / Extend-from-frame reduce it.
+- Prefer image-to-video for character scenes; text-to-video for B-roll.
+- Honor audio-bed preference; voice ref only if opted in.
+- Respect short/looped scope and usage limits.
 
 ## START NOW
-Begin with INTAKE only. Ask for the track early if missing. When the track arrives, run BPM pass (estimate), then lock a music-aware outline before images (unless they want a provisional plan first).`;
+Begin with INTAKE only. Ask for the track early if missing. When the track arrives, run BPM pass (estimate), lock outline, then Image 2.0 world lock before heavy Video 1.5 spend (unless user already has locked refs or wants a provisional plan first).`;
 
       document.getElementById('output').textContent = prompt;
       document.getElementById('output-section').style.display = 'block';
@@ -1591,6 +1604,7 @@ Begin with INTAKE only. Ask for the track early if missing. When the track arriv
       document.getElementById('aspectRatio').value = 'ask';
       document.getElementById('budgetMode').value = 'ask';
       document.getElementById('resolutionPref').value = 'ask';
+      document.getElementById('audioBedMode').value = 'song';
       const guided = document.querySelector('input[name="workflowMode"][value="guided"]');
       if (guided) guided.checked = true;
       document.getElementById('mood').value = '';
