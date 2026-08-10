@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GrokMusicVideoPrompt</title>
-  <meta name="description" content="Build a structured Grok Imagine music-video prompt: intake, BPM-aware outline, clips, extensions, and last-frame continuity." />
+  <meta name="description" content="Grok Imagine music-video prompt builder for Image 2.0 + Video 1.5: multi-ref world lock, 1080p clips, extend, BPM outline, last-frame continuity." />
   <meta name="theme-color" content="#00ff9d" />
 
   <!-- Icons -->
@@ -17,13 +17,13 @@
 
   <!-- Social preview -->
   <meta property="og:title" content="GrokMusicVideoPrompt" />
-  <meta property="og:description" content="Turn a finished track into a consistent Grok Imagine music video." />
+  <meta property="og:description" content="Music-video workflow for Grok Imagine Image 2.0 + Video 1.5 — multi-ref world lock, clips, extend, continuity." />
   <meta property="og:image" content="https://medicinalsheep.github.io/grokmusicvideoprompt/icon/gmvpicon.png" />
   <meta property="og:url" content="https://medicinalsheep.github.io/grokmusicvideoprompt/" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="GrokMusicVideoPrompt" />
-  <meta name="twitter:description" content="Turn a finished track into a consistent Grok Imagine music video." />
+  <meta name="twitter:description" content="Music-video workflow for Grok Imagine Image 2.0 + Video 1.5." />
   <meta name="twitter:image" content="https://medicinalsheep.github.io/grokmusicvideoprompt/icon/gmvpicon.png" />
 
   <style>
@@ -675,8 +675,8 @@
     <h1>GrokMusicVideoPrompt</h1>
   </header>
   <p class="subtitle">
-    Turn a finished track into a consistent Grok Imagine music video.
-    <span class="flow-line">Intake → outline → title card → Scene&nbsp;1 image → base clip → extensions → next scene.</span>
+    Structured music-video workflow for <strong style="color: var(--text);">Grok Imagine Image&nbsp;2.0</strong> + <strong style="color: var(--text);">Video&nbsp;1.5</strong>.
+    <span class="flow-line">Intake → BPM → world lock → outline → title card → image-to-video → extend → assemble.</span>
   </p>
 
   <!-- ==================== WHO + HOW ==================== -->
@@ -684,10 +684,10 @@
     <h2>Who this is for</h2>
     <p class="guide-block">
       You already have a finished song as an <strong style="color: var(--text);">.mp3</strong> or
-      <strong style="color: var(--text);">.wav</strong> file, and you want to make a music video with
-      <strong style="color: var(--text);">Grok Imagine</strong> — planned scenes, matching style, and
-      clips you can extend, loop, or combine in Grok. Scope is up to you — a few looped clips or a
-      longer cut. This tool builds the structured prompt that keeps the workflow consistent.
+      <strong style="color: var(--text);">.wav</strong> file, and you want a music video with
+      <strong style="color: var(--text);">Grok Imagine</strong> (Image&nbsp;2.0 stills + Video&nbsp;1.5 clips).
+      Scope is yours — a few looped clips or a longer cut. This page builds the master prompt that locks
+      planning, multi-ref consistency, and chain continuity.
     </p>
 
     <details class="guide-details">
@@ -696,6 +696,15 @@
         <span class="summary-hint">(tap to expand)</span>
       </summary>
       <div class="details-body">
+        <div class="guide-block">
+          <strong class="label">Current Imagine stack</strong>
+          <ul>
+            <li><strong style="color: var(--text);">Image 2.0</strong> — multi-ref stills, precision edits, character/location/prop “world” lock, sharper title text</li>
+            <li><strong style="color: var(--text);">Video 1.5</strong> — up to ~15s clips, multi-ref (often up to 7), voice ref, native 1080p, text-to-video + image-to-video, improved Extend / Extend-from-frame</li>
+            <li><strong style="color: var(--text);">Preferred path</strong> — Image 2.0 world lock → image-to-video → same-scene Extend. Text-to-video is fine for B-roll, weaker for locked characters</li>
+          </ul>
+        </div>
+
         <div class="guide-block">
           <strong class="label">Option A — Guided in Grok</strong>
           Copy a ready-made opener (link + short instructions) into a Grok chat, then attach your track.
@@ -716,45 +725,40 @@
         <div class="guide-block">
           <strong class="label">Option B — Build the prompt yourself</strong>
           Fill out the form below, click <strong style="color: var(--text);">Generate Master Prompt</strong>,
-          copy it into a Grok chat, and attach your track. Flow: intake → BPM pass → outline → title card →
-          Scene&nbsp;1 image → base clip → extensions → last-frame handoffs → assemble.
+          copy it into a Grok chat, and attach your track. Flow: intake → BPM → <strong style="color: var(--text);">Image&nbsp;2.0 world lock</strong>
+          → outline → title card → Scene&nbsp;1 still → image-to-video → Extend → chain handoff → assemble.
         </div>
 
         <div class="guide-block">
           <strong class="label">What you’ll need</strong>
           <ul>
-            <li>Your finished track (<code>.mp3</code> or <code>.wav</code>) — attach it in Grok for BPM/structure</li>
-            <li>Song name, artist, and a rough visual mood</li>
-            <li>Optional: multi-image refs, voice ref, lyric notes, must-include moments</li>
-            <li>Grok (app or grok.com) with Imagine for stills, video, and combining clips</li>
+            <li>Finished track (<code>.mp3</code> / <code>.wav</code>) — attach in Grok for BPM/structure</li>
+            <li>Song name, artist, rough mood</li>
+            <li>Optional: up to ~7 multi-image refs (character / location / props), voice ref, lyric notes</li>
+            <li>Grok app or grok.com (Image 2.0 + Video 1.5)</li>
           </ul>
         </div>
 
         <div class="guide-block">
-          <strong class="label">Clip length &amp; workflow</strong>
-          Pick a base length (<strong style="color: var(--text);">6s / 10s / 15s</strong>; default 10s)
-          and a workflow style:
+          <strong class="label">Clip length &amp; continuity</strong>
+          Plan in <strong style="color: var(--text);">6s / 10s / 15s</strong> bases (default 10s). Extensions stay in the
+          <em>same</em> scene (motion only). For the next chain:
           <ul>
-            <li><strong style="color: var(--text);">Guided</strong> — one image/prompt at a time (recommended)</li>
-            <li><strong style="color: var(--text);">Full prompt pack</strong> — all copy-ready prompts after outline approval</li>
+            <li>Prefer <strong style="color: var(--text);">Extend / Extend from frame</strong> when the UI offers it, or</li>
+            <li><strong style="color: var(--text);">Screenshot the last frame</strong> and use it as the next start image — still the reliable continuity method</li>
           </ul>
-          Plan scenes in <strong style="color: var(--text);">1× / 2× / 3×</strong> your base length
-          (helpers and placeholders update when you change clip length). Extensions stay in the
-          <em>same</em> scene. For continuity between chains: <strong style="color: var(--text);">screenshot the last frame</strong>
-          of the finished clip (e.g. after a full 30s = base + 2 ext) and use that still as the
-          <strong style="color: var(--text);">starting image</strong> for the next clip — don’t invent the next start from text alone.
+          Don’t invent the next start from text alone if you want characters/scene to match.
         </div>
 
         <div class="guide-block">
           <strong class="label">Tips &amp; edge cases</strong>
           <ul>
-            <li><strong style="color: var(--text);">Scope is yours</strong> — full production cut, a few looped clips, or whatever fits your tokens and taste. You don’t need a long-form MV.</li>
-            <li><strong style="color: var(--text);">Use Grok tab or Grok app</strong> — when combining / mixing, work in the <strong style="color: var(--text);">Grok</strong> product (grok.com tab or the Grok app), not Grok inside the <strong style="color: var(--text);">X</strong> tab.</li>
-            <li><strong style="color: var(--text);">Two consistency layers</strong> — (1) re-attach multi-image character/location refs in Imagine when you can; (2) <strong style="color: var(--text);">screenshot the last frame</strong> of a finished chain for the next start. Refs help identity; last-frame keeps shot flow. Text-only next starts break consistency.</li>
-            <li><strong style="color: var(--text);">Voice ref (optional)</strong> — for character speech if Imagine offers it; your song file is still the music bed.</li>
-            <li><strong style="color: var(--text);">BPM in Grok</strong> — attach your track in chat; Grok should <em>estimate</em> BPM / structure and plan scene times (this page does not read the file; correct Grok if the estimate is off).</li>
-            <li><strong style="color: var(--text);">10s default</strong> — best balance; two extensions ≈ a clean 30s scene. <strong style="color: var(--text);">15s</strong> fewer gens; <strong style="color: var(--text);">6s</strong> montage/loops.</li>
-            <li><strong style="color: var(--text);">Try the form</strong> — use <em>Load example</em> for the Report Card sample, then Generate.</li>
+            <li><strong style="color: var(--text);">World lock first</strong> — use Image 2.0 multi-ref stills for character sheets, locations, and props before heavy video spend</li>
+            <li><strong style="color: var(--text);">1080p</strong> — native on Video 1.5 when available; higher quality, higher usage</li>
+            <li><strong style="color: var(--text);">Native audio</strong> — keep your song as the bed, or allow Imagine complementary SFX/music if you choose</li>
+            <li><strong style="color: var(--text);">Grok app / grok.com</strong> for combine — not Grok-in-X</li>
+            <li><strong style="color: var(--text);">Scope</strong> — full cut or a few loops; free tiers and weekly usage still limit long form</li>
+            <li><strong style="color: var(--text);">Example</strong> — Report Card sample is style reference from an earlier model era; process still applies</li>
           </ul>
         </div>
       </div>
@@ -785,13 +789,13 @@
       Optional — pre-fill these so Grok skips re-asking. Leave blank and Grok will ask during intake.
     </p>
 
-    <label for="assets">Starting images / multi-refs</label>
-    <textarea id="assets" placeholder="e.g. I’ll attach up to ~7 Imagine refs: face + full body, black jacket, alley location. Logo for end card."></textarea>
-    <p class="hint">Character / wardrobe / location stills to re-attach in Imagine when multi-ref is available. List what you’ll attach.</p>
+    <label for="assets">World lock / multi-refs (up to ~7)</label>
+    <textarea id="assets" placeholder="e.g. Face + full body, jacket detail, classroom wide, report-card prop, end logo. Aim for character / location / prop sheets via Image 2.0 multi-ref."></textarea>
+    <p class="hint">Video 1.5 often allows up to ~7 image refs. Use Image 2.0 first to lock a consistent world (character, locations, props), then re-attach those refs on video gens.</p>
 
     <label for="voiceRef">Voice ref (optional)</label>
     <textarea id="voiceRef" placeholder="e.g. None — instrumental. Or: short voice sample for the lead if using speech."></textarea>
-    <p class="hint">Optional, if Imagine offers voice ref. Your song file stays the music bed.</p>
+    <p class="hint">Video 1.5 voice ref when available. Separate from your song bed (see audio preference below).</p>
 
     <label for="mustInclude">Must-include notes / lyric moments</label>
     <textarea id="mustInclude" placeholder="e.g. Chorus: neon rain on the character’s face. Bridge: hard cut to empty rooftop."></textarea>
@@ -810,7 +814,7 @@
       <div>
         <label for="titleCardMode">Title card</label>
         <select id="titleCardMode">
-          <option value="auto" selected>Auto — black background, white text</option>
+          <option value="auto" selected>Auto — black + white text (Image 2.0 for crisp type)</option>
           <option value="user">I’ll supply title art / graphics</option>
           <option value="ask">Ask me in chat</option>
         </select>
@@ -839,17 +843,31 @@
           <option value="medium">Medium — short cut, selective scenes</option>
           <option value="full">Full — cover the track as planned</option>
         </select>
-        <p class="hint">Video usually costs more usage than chat. Match plan length to your budget.</p>
+        <p class="hint">1080p video and long form burn usage fast. Free tiers still limited.</p>
       </div>
     </div>
 
-    <label for="resolutionPref">Resolution preference</label>
-    <select id="resolutionPref" style="max-width: 420px;">
-      <option value="ask" selected>Ask / use whatever my Grok surface offers</option>
-      <option value="720">Prefer 720p if available</option>
-      <option value="1080">Prefer 1080p if available</option>
-    </select>
-    <p class="hint">Higher res usually costs more; options vary by plan and surface.</p>
+    <div class="row">
+      <div>
+        <label for="resolutionPref">Resolution preference</label>
+        <select id="resolutionPref">
+          <option value="ask" selected>Ask / use whatever my Grok surface offers</option>
+          <option value="720">Prefer 720p (lower usage)</option>
+          <option value="1080">Prefer native 1080p (Video 1.5; higher quality + cost)</option>
+        </select>
+        <p class="hint">Native 1080p when available — better look, more compute.</p>
+      </div>
+      <div>
+        <label for="audioBedMode">Audio when assembling</label>
+        <select id="audioBedMode">
+          <option value="song" selected>Keep my song as the only music bed</option>
+          <option value="song_sfx">Song bed + allow Imagine SFX / ambience</option>
+          <option value="imagine">Allow Imagine complementary music/SFX (I may mix later)</option>
+          <option value="ask">Ask me in chat</option>
+        </select>
+        <p class="hint">Video 1.5 may produce native audio per clip. Choose how it should relate to your track.</p>
+      </div>
+    </div>
 
     <label style="margin-top: 1.25rem;">Workflow style</label>
     <div class="choice-grid" role="radiogroup" aria-label="Workflow style">
@@ -995,12 +1013,15 @@
         ? ` for “${songName}”${artist ? ` by ${artist}` : ''}`
         : '';
       const message =
-        `I have a finished track (.mp3 / .wav) and want a consistent Grok Imagine music video${songBit}. ` +
-        `Please use this tool/workflow to help me plan and generate it step by step:\n${LIVE_TOOL_URL}\n\n` +
-        `Work in the Grok product (grok.com tab or Grok app) — not Grok inside the X tab — especially when combining clips.\n` +
-        `Start with intake (multi-image refs, optional voice ref, clip length 6/10/15s, aspect ratio, scope/budget, title card), then outline only — no images until I approve the plan.\n` +
-        `When I attach my track, analyze BPM and rough song structure first, then plan scene times and clip chains accordingly.\n` +
-        `Consistency: re-attach my image refs when generating; between chains screenshot the last frame for the next start (don’t invent next starts from text alone).`;
+        `I have a finished track (.mp3 / .wav) and want a consistent Grok Imagine music video${songBit} ` +
+        `(Image 2.0 stills + Video 1.5 clips).\n` +
+        `Please use this tool/workflow step by step:\n${LIVE_TOOL_URL}\n\n` +
+        `Work in Grok app or grok.com — not Grok inside the X tab — especially when combining clips.\n` +
+        `When I attach my track, estimate BPM/structure first, then plan scene times.\n` +
+        `Use Image 2.0 multi-ref (up to ~7) to world-lock character/location/props before heavy video.\n` +
+        `Prefer image-to-video + same-scene Extend / Extend-from-frame; text-to-video only for B-roll.\n` +
+        `Between chains: last-frame screenshot (or Extend-from-frame) for the next start — not text-only new starts.\n` +
+        `Fill/use the generated master prompt from the page for full rules if available.`;
 
       copyText(message)
         .then(() => {

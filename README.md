@@ -1,8 +1,11 @@
 # GrokMusicVideoPrompt
 
-Structured prompt builder for **Grok Imagine** music videos: intake, BPM-aware outline, clip chains, extensions, and last-frame continuity.
+Structured prompt builder for **Grok Imagine music videos** on the current stack:
 
-You bring a finished `.mp3` / `.wav`. This static page does **not** read your audio — attach the track **in Grok** so it can estimate BPM/structure and plan scene times. Scope can be a full cut or a few looped clips.
+- **Image 2.0** — multi-ref stills, precision edits, character/location/prop world lock, sharper title text  
+- **Video 1.5** — up to ~15s clips, multi-ref (often up to ~7), voice ref, native 1080p when available, text-to-video + image-to-video, improved **Extend / Extend from frame**
+
+You bring a finished `.mp3` / `.wav`. This static page does **not** read audio — attach the track **in Grok** so it can estimate BPM/structure. Scope can be a full cut or a few looped clips.
 
 ## Links
 
@@ -15,79 +18,81 @@ You bring a finished `.mp3` / `.wav`. This static page does **not** read your au
 
 ## Who this is for
 
-- Finished song ready
-- Want a Grok Imagine music video with planned scenes and locked style
-- Prefer **last-frame screenshots** between clip chains for continuity (not a new text-only start image each time)
+- Finished song ready  
+- Want planned scenes and locked style in Grok Imagine  
+- Prefer **image-first + multi-ref + last-frame / Extend-from-frame** continuity over ad-hoc text-to-video  
 
 ## How to use
 
 ### Option A — Opener in Grok
 
-1. Open the [live site](https://medicinalsheep.github.io/grokmusicvideoprompt/)
-2. **Copy link for Grok** (or paste the URL + your own ask)
-3. Paste into a Grok chat and **attach your track**
-4. Strongly recommended: also fill the form → **Generate Master Prompt** → paste that too (full rules beat a bare URL)
+1. Open the [live site](https://medicinalsheep.github.io/grokmusicvideoprompt/)  
+2. **Copy link for Grok**  
+3. Paste into Grok (app or grok.com) and **attach your track**  
+4. Strongly recommended: form → **Generate Master Prompt** → paste that too  
 
 ### Option B — Full master prompt
 
-1. Open the live tool (or `index.html` locally)
-2. Optional: **Load example** (Report Card style sample)
-3. Fill song, assets, clip length, aspect, scope, mood, scenes
-4. **Generate Master Prompt** → copy → paste into Grok → attach track
-
-## What you’ll need
-
-- Finished track (`.mp3` / `.wav`) attached in Grok for BPM/structure estimate
-- Song name, artist, rough mood
-- Optional: multi-image refs, voice ref, lyric notes
-- Grok app or grok.com (Imagine for stills/video/combine)
-
-## Form sections
-
-1. **Song details** — name, artist, credits  
-2. **Assets & preferences** — multi-refs, voice ref, must-includes, clip length **6/10/15s**, title card, aspect (**16:9 · 9:16 · 1:1 · 3:2 · 4:3 · 21:9**), scope, resolution, guided vs full pack  
-3. **Visual direction** — mood + style lock  
-4. **Timeline** — runtime, structure, scene breakdown  
+1. Fill song, **world-lock refs (up to ~7)**, clip length, aspect, scope, audio preference, mood, scenes  
+2. Optional: **Load example** (Report Card style; linked X video is older-model reference)  
+3. **Generate Master Prompt** → copy into Grok → attach track  
 
 ## Flow
 
-1. **Intake** — track, refs, prefs  
-2. **BPM pass** — Grok *estimates* BPM / sections from the attached track (user can correct)  
-3. **Outline** — music-aware plan; no images yet  
-4. **Title card** → **Scene 1 start image** → **base clip** → **extensions** (same scene)  
-5. **Boundary** — screenshot last frame → next clip start (if continuity)  
-6. **Assemble** — confirm order; prefer Grok app / grok.com, not Grok-in-X  
+1. **Intake** — track, multi-refs, voice, prefs  
+2. **BPM pass** — estimate structure from attached track  
+3. **Outline** — music-aware plan (no video yet)  
+4. **Image 2.0 world lock** — character / location / prop stills  
+5. **Title card** — Image 2.0 for crisp text when auto  
+6. **Scene still → image-to-video** (Video 1.5)  
+7. **Same-scene Extend** (Extend UI / Extend-from-frame)  
+8. **Chain boundary** — last-frame screenshot and/or Extend-from-frame for next start  
+9. **Assemble** in Grok app/grok.com (not Grok-in-X); honor audio-bed preference  
+
+**Text-to-video** is available but preferred only for B-roll; character scenes stay image-first.
 
 ## Clip length (planning defaults)
 
-| Base | Blocks (base / +1 / +2 ext) | Notes |
-|------|------------------------------|--------|
+| Base | Blocks | Notes |
+|------|--------|--------|
 | 6s | 6 / 12 / 18s | Montage, loops |
 | 10s | 10 / 20 / 30s | Default |
 | 15s | 15 / 30 / 45s | Longer takes, fewer gens |
 
-Match the duration control on **your** Grok surface if it differs. Extensions stay in the **same** scene. Between chains: **last-frame screenshot** for continuity; multi-refs help identity.
+Match your surface’s duration control if it differs.
+
+## Form highlights
+
+- Multi-refs / world lock (up to ~7)  
+- Voice ref (optional)  
+- Aspect: **16:9 · 9:16 · 1:1 · 3:2 · 4:3 · 21:9**  
+- Resolution: 720 vs **native 1080p** (quality vs cost)  
+- **Audio when assembling** — song only / song + SFX / allow Imagine complementary audio  
+- Scope light/medium/full; guided vs full prompt pack  
+
+## Continuity
+
+- **Within a scene:** Video 1.5 Extend (motion-only prompts; no “use last frame” language inside extends)  
+- **Between chains:** last-frame **screenshot** as next start image remains the reliable method; use **Extend from frame** when the UI fits  
+- Do **not** invent next starts from text alone if you want characters/scene to match  
 
 ## Tips
 
-- Scope light/medium/full — video uses more usage than chat  
-- Multi-refs + last-frame (not text-only next starts)  
-- Voice ref optional; song file is the music bed  
-- Aspect ratios include 4:3 and 21:9; if unsupported on your surface, pick the closest  
-- Soft **timeline check** on the form is advisory only  
+- World-lock with Image 2.0 **before** burning 1080p video budget  
+- Free tiers and long form still limited  
+- Report Card example on X = earlier model era (style only)  
 
 ## Local
 
-Open `index.html` — no build step. GitHub Pages serves the same files.
+Open `index.html` — no build step.
 
 ## Icons
 
 | File | Use |
 |------|-----|
-| `icon/favicon-16x16.png` | Tab 16×16 |
-| `icon/icon-32x32.png` | Tab 32×32 |
+| `icon/favicon-16x16.png` / `icon-32x32.png` | Favicons |
 | `icon/icon-192.png` / `icon-512.png` | High-res / PWA |
-| `icon/gmvpicon.png` | Header, Apple touch, social preview |
+| `icon/gmvpicon.png` | Header, Apple touch, social |
 
 ## Support
 
