@@ -699,9 +699,9 @@
         <div class="guide-block">
           <strong class="label">Current Imagine stack</strong>
           <ul>
-            <li><strong style="color: var(--text);">Image 2.0</strong> — multi-ref stills, precision edits, character/location/prop “world” lock, sharper title text</li>
-            <li><strong style="color: var(--text);">Video 1.5</strong> — up to ~15s clips, multi-ref (often up to 7), voice ref, native 1080p, text-to-video + image-to-video, improved Extend / Extend-from-frame</li>
-            <li><strong style="color: var(--text);">Preferred path</strong> — Image 2.0 world lock → image-to-video → same-scene Extend. Text-to-video is fine for B-roll, weaker for locked characters</li>
+            <li><strong style="color: var(--text);">Image 2.0</strong> (Quality Mode) — multi-ref stills (edit flow up to ~5 inputs), precision edits, Smart Resize, world lock (character / location / props), sharp title text</li>
+            <li><strong style="color: var(--text);">Video 1.5</strong> — ~6–15s by plan, multi-ref (often up to ~7), voice ref, native 1080p when available, image-to-video + text-to-video, Extend / Extend from frame</li>
+            <li><strong style="color: var(--text);">Preferred path</strong> — world lock → image-to-video → same-scene Extend. Text-to-video for B-roll. Long cuts: chain clips, then assemble in Grok and/or an external editor</li>
           </ul>
         </div>
 
@@ -741,11 +741,11 @@
 
         <div class="guide-block">
           <strong class="label">Clip length &amp; continuity</strong>
-          Plan in <strong style="color: var(--text);">6s / 10s / 15s</strong> bases (default 10s). Extensions stay in the
+          Plan in <strong style="color: var(--text);">6s / 10s / 15s</strong> bases (default 10s; lower plans may cap nearer 6s). Extensions stay in the
           <em>same</em> scene (motion only). For the next chain:
           <ul>
-            <li>Prefer <strong style="color: var(--text);">Extend / Extend from frame</strong> when the UI offers it, or</li>
-            <li><strong style="color: var(--text);">Screenshot the last frame</strong> and use it as the next start image — still the reliable continuity method</li>
+            <li><strong style="color: var(--text);">Extend Video</strong> / <strong style="color: var(--text);">Extend from frame</strong> when the UI offers it, and/or</li>
+            <li><strong style="color: var(--text);">Save / screenshot the last frame</strong>, upload as the next start image — still the most reliable handoff</li>
           </ul>
           Don’t invent the next start from text alone if you want characters/scene to match.
         </div>
@@ -753,12 +753,13 @@
         <div class="guide-block">
           <strong class="label">Tips &amp; edge cases</strong>
           <ul>
-            <li><strong style="color: var(--text);">World lock first</strong> — use Image 2.0 multi-ref stills for character sheets, locations, and props before heavy video spend</li>
-            <li><strong style="color: var(--text);">1080p</strong> — native on Video 1.5 when available; higher quality, higher usage</li>
-            <li><strong style="color: var(--text);">Native audio</strong> — keep your song as the bed, or allow Imagine complementary SFX/music if you choose</li>
-            <li><strong style="color: var(--text);">Grok app / grok.com</strong> for combine — not Grok-in-X</li>
-            <li><strong style="color: var(--text);">Scope</strong> — full cut or a few loops; free tiers and weekly usage still limit long form</li>
-            <li><strong style="color: var(--text);">Example</strong> — Report Card sample is style reference from an earlier model era; process still applies</li>
+            <li><strong style="color: var(--text);">World lock first</strong> — Image 2.0 character / location / prop sheets before burning video usage</li>
+            <li><strong style="color: var(--text);">Smart Resize</strong> — recompose a locked still into your video ratio instead of regenerating from scratch when possible</li>
+            <li><strong style="color: var(--text);">Negative prompts</strong> — short avoid-lists (extra limbs, watermarks, style drift); weave into each gen</li>
+            <li><strong style="color: var(--text);">1080p</strong> — higher quality + cost when available</li>
+            <li><strong style="color: var(--text);">Long form</strong> — chain short clips; assemble in Grok and/or an external editor if needed</li>
+            <li><strong style="color: var(--text);">Grok app / grok.com</strong> — not Grok-in-X for serious mix work</li>
+            <li><strong style="color: var(--text);">Example</strong> — Report Card on X is an older-model style reference</li>
           </ul>
         </div>
       </div>
@@ -791,7 +792,7 @@
 
     <label for="assets">World lock / multi-refs (up to ~7)</label>
     <textarea id="assets" placeholder="e.g. Face + full body, jacket detail, classroom wide, report-card prop, end logo. Aim for character / location / prop sheets via Image 2.0 multi-ref."></textarea>
-    <p class="hint">Video 1.5 often allows up to ~7 image refs. Use Image 2.0 first to lock a consistent world (character, locations, props), then re-attach those refs on video gens.</p>
+    <p class="hint">Image 2.0 edit multi-ref often up to ~5 inputs; Video 1.5 multi-ref often up to ~7. Lock character / locations / props in Image 2.0 first, then re-attach on video.</p>
 
     <label for="voiceRef">Voice ref (optional)</label>
     <textarea id="voiceRef" placeholder="e.g. None — instrumental. Or: short voice sample for the lead if using speech."></textarea>
@@ -800,6 +801,10 @@
     <label for="mustInclude">Must-include notes / lyric moments</label>
     <textarea id="mustInclude" placeholder="e.g. Chorus: neon rain on the character’s face. Bridge: hard cut to empty rooftop."></textarea>
     <p class="hint">Optional known section times help. Attach the track in Grok so it can estimate BPM and refine the plan.</p>
+
+    <label for="negativePrompt">Negative prompt / avoid list (optional)</label>
+    <textarea id="negativePrompt" placeholder="e.g. no extra fingers, no warped face, no watermark, no readable gibberish text, no anime style, no sudden costume change"></textarea>
+    <p class="hint">Short, specific exclusions. Imagine handles these best woven into prompts (or a dedicated negative field if your UI has one) — keep the list tight.</p>
 
     <div class="row">
       <div>
@@ -829,11 +834,15 @@
           <option value="16:9">16:9 — widescreen</option>
           <option value="9:16">9:16 — vertical</option>
           <option value="1:1">1:1 — square</option>
-          <option value="3:2">3:2 — classic photo</option>
-          <option value="4:3">4:3 — classic TV / photo</option>
+          <option value="3:2">3:2 — photo landscape</option>
+          <option value="2:3">2:3 — photo portrait</option>
+          <option value="4:3">4:3 — classic landscape</option>
+          <option value="3:4">3:4 — classic portrait</option>
+          <option value="2:1">2:1 — wide banner (Image 2.0)</option>
+          <option value="1:2">1:2 — tall banner (Image 2.0)</option>
           <option value="21:9">21:9 — ultrawide cinema</option>
         </select>
-        <p class="hint">Lock before title card / Scene 1 (and when using a provided start image).</p>
+        <p class="hint">Image 2.0 Smart Resize: 1:2 · 9:16 · 2:3 · 3:4 · 1:1 · 4:3 · 3:2 · 16:9 · 2:1. Video ratios may differ by surface — fall back if needed. Lock before first still.</p>
       </div>
       <div>
         <label for="budgetMode">Project scope / compute</label>
@@ -1018,10 +1027,10 @@
         `Please use this tool/workflow step by step:\n${LIVE_TOOL_URL}\n\n` +
         `Work in Grok app or grok.com — not Grok inside the X tab — especially when combining clips.\n` +
         `When I attach my track, estimate BPM/structure first, then plan scene times.\n` +
-        `Use Image 2.0 multi-ref (up to ~7) to world-lock character/location/props before heavy video.\n` +
+        `Use Image 2.0 to world-lock character/location/props (multi-ref) before heavy video; Smart Resize stills to the video ratio if needed.\n` +
         `Prefer image-to-video + same-scene Extend / Extend-from-frame; text-to-video only for B-roll.\n` +
-        `Between chains: last-frame screenshot (or Extend-from-frame) for the next start — not text-only new starts.\n` +
-        `Fill/use the generated master prompt from the page for full rules if available.`;
+        `Between chains: save last frame and/or Extend-from-frame for the next start — not text-only new starts.\n` +
+        `Apply my negative / avoid list on stills and clips. Use the page’s generated master prompt for full rules if available.`;
 
       copyText(message)
         .then(() => {
@@ -1044,6 +1053,8 @@
       document.getElementById('voiceRef').value = 'None — picture-led; song is the bed.';
       document.getElementById('mustInclude').value =
         'Readable report card gags (all D grades + “too woke / difficulty telling the truth” parent note). Hand-off of the paper from teacher to student. Same classroom and kid. End on clean title/end card (Image 2.0 crisp text).';
+      document.getElementById('negativePrompt').value =
+        'no extra fingers, no warped face, no watermark, no unreadable gibberish text, no anime, no costume change mid-scene';
       document.getElementById('clipLength').value = '10';
       document.getElementById('titleCardMode').value = 'auto';
       document.getElementById('aspectRatio').value = '16:9';
@@ -1089,13 +1100,19 @@
     }
 
     function aspectRatioLabel(value) {
-      if (value === '16:9') return '16:9 widescreen';
-      if (value === '9:16') return '9:16 vertical';
-      if (value === '1:1') return '1:1 square';
-      if (value === '3:2') return '3:2 classic photo';
-      if (value === '4:3') return '4:3 classic TV / photo';
-      if (value === '21:9') return '21:9 ultrawide cinema';
-      return 'Ask before the first image';
+      const map = {
+        '16:9': '16:9 widescreen',
+        '9:16': '9:16 vertical',
+        '1:1': '1:1 square',
+        '3:2': '3:2 photo landscape',
+        '2:3': '2:3 photo portrait',
+        '4:3': '4:3 classic landscape',
+        '3:4': '3:4 classic portrait',
+        '2:1': '2:1 wide banner',
+        '1:2': '1:2 tall banner',
+        '21:9': '21:9 ultrawide cinema',
+      };
+      return map[value] || 'Ask before the first image';
     }
 
     function budgetModeLabel(value) {
@@ -1228,19 +1245,19 @@ Still always:
 3. After outline approval, deliver ONE complete prompt pack for the whole video (not drip-fed step-by-step).
 
 The pack must include, in order, with clear labels:
-- Image 2.0 world-lock still prompts (character / location / props; multi-ref up to ~7)
-- Title card (Image 2.0 for crisp text when auto)
+- Image 2.0 world-lock stills (character / location / props) + negative/avoid list + Smart Resize note
+- Title card (Image 2.0 crisp text when auto)
 - For EACH scene:
-  - Start image: Scene 1 from world lock; later scenes prefer last-frame / Extend-from-frame (not text-only when continuity wanted)
-  - Base video prompt (${base}s) — prefer image-to-video + multi-refs
-  - Extension prompts if planned (1 for ${mid}s, 2 for ${full}s) — same-scene motion only; use Extend UI when available
-  - Boundary note: Extend-from-frame or last-frame screenshot → next start
-- Audio preference + assembly order
+  - Start image: Scene 1 from world lock; later scenes prefer last-frame / Extend-from-frame
+  - Base video (${base}s) — image-to-video + multi-refs + negatives
+  - Extension prompts if planned — same-scene motion only; Extend UI when available
+  - Boundary: Extend-from-frame or save last frame → next start
+- Audio preference + assembly order (Grok and/or external editor for long form)
 - Style lock reminder
 
 Rules inside the pack:
 - Extension prompts = same-scene motion only. NEVER last-frame / new-scene language inside extension prompts.
-- Text-to-video allowed for B-roll only; image-first path preferred for locked characters.
+- Text-to-video = B-roll only; image-first for locked characters.
 - Continuity: Extend-from-frame and/or last-frame screenshot — not text-only next starts.
 - Scope flexible: full cut, fewer scenes, or loops.
 
@@ -1287,11 +1304,13 @@ Extension rules (always):
       }
 
       return `### 2. WORLD LOCK — Image 2.0 (after outline approval, before heavy video)
-Build a small consistent “world” with Image 2.0 multi-ref stills (often up to ~7 refs when the product allows):
-- Character sheet(s) and/or hero wardrobe
+Build a consistent “world” with Image 2.0 (official pattern: character + locations + props, same look across stills):
+- Character sheet(s) / wardrobe
 - Key location(s)
 - Important props
-- Re-use these refs on later stills and Video 1.5 gens
+- Apply the **negative / avoid list** on every still
+- Use **Smart Resize** if a still must match the locked video aspect
+- Re-attach these refs on later Image 2.0 edits and Video 1.5 gens (video multi-ref often up to ~7; image edit multi-ref often up to ~5 — use what the UI allows)
 Wait for approval of the world pack before title card (unless the user already supplied locked refs).
 
 ### 3. TITLE CARD — Image 2.0 still
@@ -1313,11 +1332,11 @@ Format:
 
 **Scene 1 — Base video (${base}s)**
 \`\`\`
-[paste-ready prompt: subject, action, camera move, lighting, style; approved start image = first frame; re-attach multi-refs]
+[paste-ready prompt: subject, action, camera move, lighting, style; approved start image = first frame; re-attach multi-refs; include avoid list]
 \`\`\`
-- Duration: ${base}s (match duration control)
+- Duration: ${base}s (match duration control; plan may cap nearer 6s)
 - Resolution: honor user preference when available (native 1080p costs more)
-- Re-attach world-lock refs + optional voice ref
+- Re-attach world-lock refs + optional voice ref + negatives
 - Wait before extensions.
 
 If you can generate video directly, generate from the approved image, then wait.
@@ -1357,7 +1376,9 @@ When the scene’s planned length is reached (after base or last extension — e
 4. Boundary handoff → next scene  
 
 ### 9. BEFORE ASSEMBLY
-Confirm: clip order, loops/skips, aspect ratio, resolution, **audio bed preference**, Grok app/grok.com (not X). Then assemble only what they approved.
+Confirm: clip order, loops/skips, aspect ratio, resolution, **audio bed preference**, working in Grok app/grok.com (not X).
+Assemble in Grok when the product can hold the cut; for longer runtimes, chaining + an **external editor** is normal and fine.
+Then assemble only what they approved.
 
 Never jump ahead. Never batch future scenes unless they ask for a full prompt pack.`;
     }
@@ -1369,6 +1390,7 @@ Never jump ahead. Never batch future scenes unless they ask for a full prompt pa
       const assets = document.getElementById('assets').value.trim();
       const voiceRef = document.getElementById('voiceRef').value.trim();
       const mustInclude = document.getElementById('mustInclude').value.trim();
+      const negativePrompt = document.getElementById('negativePrompt').value.trim();
       const clipLength = document.getElementById('clipLength').value || '10';
       const titleCardMode = document.getElementById('titleCardMode').value || 'auto';
       const aspectRatio = document.getElementById('aspectRatio').value || 'ask';
@@ -1388,6 +1410,7 @@ Never jump ahead. Never batch future scenes unless they ask for a full prompt pa
       const assetsLine = assets || '(not provided — ask the user)';
       const voiceRefLine = voiceRef || '(not provided — ask if they want a voice ref, or none)';
       const mustIncludeLine = mustInclude || '(not provided — ask the user)';
+      const negativeLine = negativePrompt || '(none yet — ask for a short avoid list, or proceed with defaults: no extra limbs, no watermark, no style jump)';
       const titleCardLine = titleCardModeLabel(titleCardMode);
       const aspectLine = aspectRatioLabel(aspectRatio);
       const budgetLine = budgetModeLabel(budgetMode);
@@ -1451,31 +1474,43 @@ Style: Minimal, high-contrast, centered or elegantly placed white sans-serif. No
 The user has (or will have) a finished track (.mp3 / .wav). Plan and generate stills + video, then assemble in the full Grok product when they are ready.
 
 ## IMAGINE STACK (current)
-- **Image 2.0:** multi-ref stills, precision editing, stronger text for title cards, lock character / location / prop “world” before heavy video spend.
-- **Video 1.5:** image-to-video and text-to-video; multi-image refs (often up to ~7); optional voice ref; duration options commonly 6/10/15s; native 1080p when available (higher quality + usage); improved **Extend** / **Extend from frame**.
-- **Preferred path for music videos:** Image 2.0 world lock → image-to-video from approved stills → same-scene Extend. **Text-to-video is available** but prefer it for B-roll / non-character shots — weaker for locked faces and wardrobe.
-- Features vary by plan and surface. Prefer **grok.com or Grok app**, not Grok-in-X. Use what their UI actually offers.
+- **Image 2.0** (Quality Mode): instruction-faithful stills, precision editing (wand / segment / BG remove), multi-ref editing (up to ~5 inputs in edit flows), **Smart Resize** across official ratios, sharp small text, “build a world for video” (character / locations / props).
+- **Video 1.5:** image-to-video + text-to-video; multi-image refs (often up to ~7 on video); optional voice ref; durations commonly ~6s on lower plans up to ~15s on higher; native 1080p when available; **Extend Video** / **Extend from frame**.
+- **Preferred music-video path:** Image 2.0 world lock → (Smart Resize to video ratio if needed) → image-to-video → same-scene Extend. **Text-to-video** OK for B-roll only.
+- **Negative / avoid list:** short, specific exclusions on every still and clip prompt (and dedicated negative field if the UI has one). Do not dump long paragraph negatives.
+- Features vary by plan and surface. Prefer **grok.com or Grok app**, not Grok-in-X.
 
 ## AUDIO / BPM (do this early)
-- The static GrokMusicVideoPrompt **page** cannot read the audio file. When the user attaches the track, **estimate** BPM, duration, and rough structure. Report briefly (e.g. “~128 BPM, ~3:10, chorus ~0:48”).
-- Treat BPM as an **estimate** unless the user confirms it. Prefer their corrections.
-- Plan scene boundaries and chain lengths on sensible musical moments when possible.
-- If the track is missing, ask for it before locking the final outline (provisional plan OK first).
+- The static page cannot read the audio file. When the user attaches the track, **estimate** BPM, duration, and rough structure. Report briefly (e.g. “~128 BPM, ~3:10, chorus ~0:48”).
+- Treat BPM as an **estimate** unless confirmed. Prefer user corrections.
+- Plan scene boundaries on sensible musical moments when possible.
+- If the track is missing, ask before locking the final outline (provisional plan OK first).
 
 ## PRODUCTION NOTES
-- Scope: ${budgetLine}. Video (especially 1080p and long form) costs more usage than chat; free tiers limited — do not force a long-form MV.
-- Resolution: ${resolutionLine}. Native 1080p = better quality, higher cost; fall back if unavailable.
-- Audio when assembling: ${audioBedLine}. Optional **voice ref** is for character speech consistency only — separate from the song bed.
-- Clip length: base **${base}s** → blocks **${blocks}s**. Match their duration control if different.
-- Before assembling, confirm order of operations (clips, loops, skips, audio preference). Prefer Grok app / grok.com for combine.
+- Scope: ${budgetLine}. Video (esp. 1080p / long form) costs more usage; free tiers limited — do not force a long-form MV.
+- Resolution: ${resolutionLine}. Fall back if unavailable.
+- Audio when assembling: ${audioBedLine}. Voice ref = character speech only, separate from the song bed.
+- Clip length: base **${base}s** → blocks **${blocks}s**. Lower plans may max nearer 6s; match their duration control.
+- Long form: chain short clips (extend + last-frame handoffs). Assemble in Grok and/or an **external editor** if the product can’t hold the full runtime cleanly.
+- Before assembling, confirm clip order, loops/skips, aspect, audio preference.
+
+## NEGATIVE PROMPT / AVOID LIST
+User avoid list (apply on world-lock stills, title cards, scene stills, and video/extend prompts):
+${negativeLine}
+
+Rules:
+- Keep negatives **short and specific** (e.g. “no extra fingers, no watermark, no anime”).
+- Weave into prompts or use a UI negative field when present.
+- Re-state the avoid list at each major gen step; don’t assume it carries silently.
 
 ## CONSISTENCY LAYERS
-1. **Image 2.0 world lock** — multi-ref character / location / prop stills first (up to ~7 refs when available).
-2. **Re-attach the same refs** on later stills and Video 1.5 gens.
-3. **Image-to-video** from approved start stills (default for character scenes).
-4. **Same-scene Extend** — motion only; use Extend UI / Extend-from-frame when available (no last-frame language *inside* extension prompts).
-5. **Between chains:** Extend-from-frame **and/or** last-frame **screenshot** as next start image. Do not invent next starts from text alone when continuity matters.
-6. Refs help **who**; last-frame / Extend-from-frame helps **where the shot left off**.
+1. **Image 2.0 world lock** — character / location / prop stills first (multi-ref).
+2. **Smart Resize** locked stills into the chosen video aspect when the still was made in another ratio.
+3. **Re-attach the same refs** on later Image 2.0 and Video 1.5 gens.
+4. **Image-to-video** from approved start stills (default for character scenes).
+5. **Same-scene Extend** — motion only; Extend UI / Extend-from-frame (no last-frame language *inside* extension prompts).
+6. **Between chains:** save/screenshot last frame as next start **and/or** Extend-from-frame. Never text-only next starts when continuity matters.
+7. Refs = **who**; last-frame / Extend-from-frame = **where the shot left off**.
 
 ## CLIP MODEL
 Preferred base: ${base}s → optional Ext 1 → optional Ext 2 (totals ${base}s | ${mid}s | ${full}s). Plan in ${blocks}s blocks or fewer if budget is light. Extensions stay in the SAME scene.
@@ -1488,9 +1523,10 @@ ${workflowRules}
 ${intakeCompleteHint}
 
 Already provided (treat as answers; only re-ask if the user wants to revise):
-- World lock / multi-refs (up to ~7): ${assetsLine}
+- World lock / multi-refs: ${assetsLine}
 - Voice ref: ${voiceRefLine}
 - Must-include notes / lyric moments: ${mustIncludeLine}
+- Negative / avoid list: ${negativeLine}
 - Preferred clip length: ${base}s → scene blocks ${blocks}s
 - Aspect ratio: ${aspectLine}${aspectRatio === 'ask' ? ' — MUST ask before any image' : ' — lock for all stills/clips'}
 - Project scope / compute: ${budgetLine}
@@ -1504,16 +1540,17 @@ Already provided (treat as answers; only re-ask if the user wants to revise):
 
 If anything is still missing, ask (skip answered items):
 1. Attach finished track (.mp3 / .wav) for BPM/structure estimate (or confirm attached).
-2. Multi-image refs for Image 2.0 world lock (character, location, props — up to ~7)?
+2. Multi-image refs for Image 2.0 world lock (character, location, props)?
 3. Optional voice ref for speech, or none?
 4. Must-include notes / lyric moments (with times if known)?
-5. Clip length: 6s, 10s (default), or 15s?
-6. Target runtime / song length (prefer measured from file).
-7. Title card: auto black + white (Image 2.0 crisp text), or user art?
-8. Aspect ratio: 16:9, 9:16, 1:1, 3:2, 4:3, or 21:9?
-9. Scope: light / medium / full?
-10. Resolution: 720 / 1080 / surface default?
-11. Audio: keep song only, song + SFX, or allow Imagine complementary audio?
+5. Short negative / avoid list (or use defaults)?
+6. Clip length: 6s, 10s (default), or 15s? (note plan may cap near 6s)
+7. Target runtime / song length (prefer measured from file).
+8. Title card: auto black + white (Image 2.0 crisp text), or user art?
+9. Aspect ratio (Image 2.0 set + 21:9 if wanted): 16:9, 9:16, 1:1, 3:2, 2:3, 4:3, 3:4, 2:1, 1:2, or 21:9?
+10. Scope: light / medium / full?
+11. Resolution: 720 / 1080 / surface default?
+12. Audio: keep song only, song + SFX, or allow Imagine complementary audio?
 
 Do NOT generate images until intake is complete (or user says proceed with defaults). Prefer track + BPM estimate before locking the outline.
 
@@ -1524,8 +1561,11 @@ Do NOT generate images until intake is complete (or user says proceed with defau
 4. Wait for approval of the music-aware outline before world lock / title card / first image.
 
 ### ASPECT RATIO GATE (before any image)
-Lock aspect before title card, world-lock finals, Scene 1 start, or using a provided start image:
-**16:9**, **9:16**, **1:1**, **3:2**, **4:3**, **21:9**. If unsupported on their surface, offer the closest option.
+Lock aspect before title card, world-lock finals, Scene 1 start, or using a provided start image.
+- Image 2.0 Smart Resize set: **1:2**, **9:16**, **2:3**, **3:4**, **1:1**, **4:3**, **3:2**, **16:9**, **2:1**.
+- Also offer **21:9** ultrawide if the user wants cinema and their surface supports it (else fall back to **2:1** or **16:9**).
+- Video aspect options may be a subset — if a ratio works for stills but not video, Smart Resize or regenerate the start still in a supported video ratio.
+- Keep the same ratio across the project unless the user changes it.
 
 ### 1. OUTLINE ONLY — still no video (world-lock stills may follow after approval)
 After intake, output a structured plan only. Wait for approval before generation.
@@ -1569,14 +1609,14 @@ ${generationProcess}
 ${styleLock || 'Maintain visual consistency across all clips. Same characters, lighting, color grade, and overall aesthetic.'}
 
 Also:
-- Re-attach multi-image refs (Image 2.0 + Video 1.5) when available.
-- Expect some model drift; world lock + last-frame / Extend-from-frame reduce it.
+- Re-attach multi-image refs when available; apply the avoid list every gen.
+- Expect some drift; world lock + last-frame / Extend-from-frame reduce it.
 - Prefer image-to-video for character scenes; text-to-video for B-roll.
 - Honor audio-bed preference; voice ref only if opted in.
-- Respect short/looped scope and usage limits.
+- Respect short/looped scope and usage limits (6s caps on some plans).
 
 ## START NOW
-Begin with INTAKE only. Ask for the track early if missing. When the track arrives, run BPM pass (estimate), lock outline, then Image 2.0 world lock before heavy Video 1.5 spend (unless user already has locked refs or wants a provisional plan first).`;
+Begin with INTAKE only. Ask for the track early if missing. When the track arrives, run BPM pass (estimate), lock outline + aspect, then Image 2.0 world lock before heavy Video 1.5 spend (unless user already has locked refs or wants a provisional plan first).`;
 
       document.getElementById('output').textContent = prompt;
       document.getElementById('output-section').style.display = 'block';
@@ -1599,6 +1639,7 @@ Begin with INTAKE only. Ask for the track early if missing. When the track arriv
       document.getElementById('assets').value = '';
       document.getElementById('voiceRef').value = '';
       document.getElementById('mustInclude').value = '';
+      document.getElementById('negativePrompt').value = '';
       document.getElementById('clipLength').value = '10';
       document.getElementById('titleCardMode').value = 'auto';
       document.getElementById('aspectRatio').value = 'ask';
